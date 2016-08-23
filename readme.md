@@ -54,12 +54,16 @@ The script was developed on the R platform with version 3.1, and it is assumed t
 ==============================================================================================================================
 ##Running InFlo
 ##### Input Files : All the files should be Independent matrices(Genes as rows and samples as columns)
- * Tumor Gene Expression File
- * Normal Gene Expression File
- * Tumor Somatic Copy Number File
- * Normal Somatic Copy Number File
+ * Gene Expression File
+ * Somatic Copy Number File
+ * Methylation Data File
 
-You will need to run the "Process_Input.R" script included in the InFlo package. The R script does the following jobs 
+You will need to run the "InFlo.R" script included in the InFlo package. The R script does the following jobs
+$ cd directory/to/InFlo
+$ RScript InFlo.R [-R] [location to InFlo_PROJ_Config.txt]
+for help : 
+$ RScript InFlo.R [-H]
+
  * Read the initial files
  * Check for the duplicate genes, and eliminate redundancy using maximum absolute deviation. 
  * Check for sample names and eliminate the samples which are not present in all four files. 
