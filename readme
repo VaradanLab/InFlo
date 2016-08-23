@@ -1,0 +1,28 @@
+##### For Academic/Non-Profit use
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>
+
+
+##### For Non-Academic/For-Profit use:
+Please contact us at varadanlab@gmail.com for licensing options. 
+
+##### For Technical Support:
+Send us email at varadanlab@gmail.com
+
+==============================================================================================================================
+
+
+This README file provides step by step instructions on using InFlo on specific datasets. InFlo takes the following data as inputs per sample:
+a) Gene Expression
+b) Somatic Copy-number 
+
+Step 1: Preparing the expression and copy-number data for InFlo
+
+You will need to run the "prepare data.R" script included in the InFlo package. This script accepts gene expression data formatted as independent matrices (Genes as rows and samples as columns). Also required is the annotation of individual samples as "Control" or "Tumor". The R script compares the gene expression data per tumor sample against all of the control samples, resulting in the probability of each gene being up/down regulated in the individual tumor sample as compared to the control samples. 
+
+Similarly, the script also processes somatic copy-number data and generates a probability of copy-number alteration (amplification or deletion) in the tumor sample as compared to the control samples on a per-gene basis. 
+
+The outputs of Step 1 are files to be used by InFlo. 
+
+Step 2: Running InFlo 
+InFlo is run on specific pathway files as input along with the output files of Step 1. InFlo generates the probability of activation or inactivation of specific interactions in the pathway file on a per-tumor sample basis by modeling the pathway activity using the gene expression and copy-number data processed in Step 1. 
+

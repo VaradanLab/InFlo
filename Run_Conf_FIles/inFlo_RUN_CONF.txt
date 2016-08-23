@@ -1,0 +1,24 @@
+# Inflo Config File, Provide the information about the Gene Expression file , Somatic Copy Number file
+
+
+Info_File = "/Projects/inFlo_repository/extra/Info.txt"
+
+
+
+##Gene Expression Files and Options
+
+RNASeqV2 <- TRUE
+
+GE_FILE = "/Projects/inFlo_repository/inFlo/example_files/TCGA-OV_Expression_data.txt"
+
+
+## Somatic Copy Number Files and Options 
+CNV_FILE = "/Projects/inFlo_repository/inFlo/example_files/TCGA-OV_CNV_data.txt"
+
+
+## DNA methylation Data 
+
+METH_FILE = "/Projects/inFlo_repository/inFlo/example_files/TCGA-OV_Methylation27_data.txt"
+
+#####
+SAMPLE_INFORMATION <- "/Projects/inFlo_repository/inFlo/example_files/Sample.txt"
