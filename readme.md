@@ -60,9 +60,9 @@ The script was developed on the R platform with version 3.1, and it is assumed t
 
 You will need to run the "InFlo.R" script included in the InFlo package. The R script does the following jobs
 
-    $ cd directory/to/InFlo <br>
-    $ RScript InFlo.R [-R] [location to InFlo_PROJ_Config.txt]<br>
-for help : <br>
+    $ cd directory/to/InFlo
+    $ RScript InFlo.R [-R] [location to InFlo_PROJ_Config.txt]
+for help :
 
     $ RScript InFlo.R [-H]
 
