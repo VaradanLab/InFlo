@@ -59,10 +59,12 @@ The script was developed on the R platform with version 3.1, and it is assumed t
  * Methylation Data File
 
 You will need to run the "InFlo.R" script included in the InFlo package. The R script does the following jobs
+
     * $ cd directory/to/InFlo <br>
     * $ RScript InFlo.R [-R] [location to InFlo_PROJ_Config.txt]<br>
 for help : <br>
-$ RScript InFlo.R [-H]
+
+    * $ RScript InFlo.R [-H]
 
  * Read the initial files
  * Check for the duplicate genes, and eliminate redundancy using maximum absolute deviation. 
