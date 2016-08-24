@@ -1,3 +1,12 @@
+PATHWAYS_INTERACTION_NETWORK <- read.table("/Projects/InFlo_Analysis/Inflo-code/Pathways/PATHWAYS_INTERACTION_NETWORK.txt",sep="\t",header=T,check.names = F,stringsAsFactors = F)
+PATHWAYS_COMPONENT_NETWORK <- read.table("/Projects/InFlo_Analysis/Inflo-code/Pathways/PATHWAYS_COMPONENT_NETWORK.txt",sep="\t",header=T,check.names = F,stringsAsFactors = F)
+
+Interaction_Dir <- "/Projects/InFlo_Analysis/Inflo-code/ovarian_cancer_Inflo_data/Interactions"
+Interaction_names <- read.delim("/Projects/InFlo_Analysis/Inflo-code/Pathways/names.tab",header = T,sep="\t")
+
+
+
+
 ###########~~~~~~~~~Download Required Package~~~~~~~~~~~~~~~~~########################
 dwnPack <- function(x)
 {
@@ -243,16 +252,105 @@ InFlo <- function(X,Y){
   PATHWAY_DIR <- X
   RESULT_DIR <- Y
   setwd(INFLO_DIR)
-  Cmd <- 
-  
-  
-  
-  
-  
-  
+  #Cmd <- 
 }
 
-
+Post_Info <- function(X){
+  Inflo_Res_Dir <- X
+  Inflo_means_Dir <- paste(Inflo_Res_Dir,"_MEAN",sep="")
+  Inflo_Res_Files <- list.files(path = Inflo_Res_Dir, pattern = "-inconsistentOK-blackballing.txt")
+  
+  
+  for(i in 1:length(Inflo_Res_Files)){
+    print(i)
+    pathway_file <- read.csv(paste(Inflo_Res_Dir,Inflo_Res_Files[i],sep="/"), sep = "\t", header = T, check.names = T)
+    colnames(pathway_file)[1] <- "Patient"
+    pathway_file[,length(pathway_file[1,])] <- NULL
+    
+    Without_Norm_av <- aggregate(.~pathway_file$Patient, data = pathway_file, FUN=mean, simplify = T)
+    Without_Norm_av[,'Patient'] <- NULL
+    Without_Norm_av[,'Sample.'] <- NULL
+    colnames(Without_Norm_av)[1] <- "Patient" 
+    Without_Norm_av_colnames <- colnames(Without_Norm_av)
+    Without_Norm_av_colnames <- gsub("X","",Without_Norm_av_colnames)
+    Without_Norm_av_colnames_2 <- Without_Norm_av_colnames
+    Without_Norm_av_colnames_2[c(2:length(Without_Norm_av_colnames_2))] <- floor(as.numeric(Without_Norm_av_colnames_2[c(2:length(Without_Norm_av_colnames_2))]))
+    colnames(Without_Norm_av) <- Without_Norm_av_colnames_2
+    Without_Norm_av[,'Patient'] <- as.character(Without_Norm_av[,'Patient'])
+    for(j in 2:length(Without_Norm_av[1,])){
+      Without_Norm_av[,j] <- as.numeric(Without_Norm_av[,j])
+    }
+    av <- Without_Norm_av
+    write.table(av,file = paste(Inflo_means_Dir,paste(Inflo_Res_Files[i],"mean",sep="_"),sep="/"),sep="\t",col.names = T, row.names = F, eol = "\n")
+  }
+  
+  
+  dir_mean = Inflo_means_Dir
+  mean_filnames = list.files(dir_mean, pattern = "blackballing.txt_mean")
+  
+  Interaction_files <- list.files(Interaction_Dir, pattern = "-interaction-names.txt")
+  Interaction_names_2 <- gsub("-interaction-names.txt","",Interaction_files)
+  
+  
+  Inflo_mean_files <- list.files(Inflo_means_Dir,pattern="-inconsistentOK-blackballing.txt_mean")
+  Inflo_mean_files_2 <- gsub("-inconsistentOK-blackballing.txt_mean","",Inflo_mean_files)
+  
+  
+  req_files <- intersect(Inflo_mean_files_2,Interaction_names_2)
+  res <- NULL
+  for(i in 1:length(req_files)){
+    
+    print(i)
+    int_file <- paste(req_files[i],"-interaction-names.txt",sep="")
+    Int_names <- read.delim(paste(Interaction_Dir,int_file,sep="/"), sep="\t", header = F)
+    Int_names[length(Int_names)] <- NULL
+    Int_names[1] <- "Patient"
+    Int_names[2] <- NULL
+    #Int_names <- as.list(Int_names)
+    #Int_names <- as.character(Int_names)
+    #binned_file <- read.csv(paste(dir_mean,gsub("-interaction-names.txt","-inconsistentOK-blackballing_mean.txt",int_file),sep="/"),sep="\t", header = T)
+    binned_file <- read.csv(paste(dir_mean,paste(req_files[i],"-inconsistentOK-blackballing.txt_mean",sep=""),sep="/"),sep="\t", header = F)
+    #binned_file[,1] <- Samp_names[,2]
+    Int_names <- t(Int_names)
+    binned_file <- t(binned_file)
+    binned_file2 <- cbind(Int_names,binned_file)
+    pathway_num <- gsub("-interaction-names.txt","",int_file)
+    pathway_num <- gsub("samples_","",pathway_num)
+    pathway_name <- as.character(Interaction_names[which(Interaction_names[,"id"]==pathway_num),'name'])
+    colnames(binned_file2) <- binned_file2[1,]
+    colnames(binned_file2)[1] <- "Interaction"
+    #binned_file2[,'Patient'] <- NULL
+    binned_file3 <- binned_file2[c(3:length(binned_file2[,1])),]
+    binned_file3 <- cbind(pathway_name,pathway_num,int_file,binned_file3)
+    #colnames(binned_file) <- as.character(Int_names[1,])
+    res <- rbind(res,binned_file3)
+    
+  }
+  
+  INFLO_DATA <- res
+  INFLO_DATA <- as.data.frame(INFLO_DATA)
+  INFLO_DATA[,'Patient'] <- NULL
+  rownames(INFLO_DATA) <- NULL
+  INFLO_DATA <- INFLO_DATA[complete.cases(INFLO_DATA),]
+  INFLO_DATA$ID <- paste(INFLO_DATA[,'pathway_name'],INFLO_DATA[,'Interaction'],sep="*")
+  INFLO_DATA$ID <- gsub(" ","_",INFLO_DATA$ID)
+  rownames(INFLO_DATA) <- INFLO_DATA[,'ID']
+  INFLO_DATA[,'ID'] <- NULL
+  R1 <- NULL
+  R1 <- data.frame(do.call('rbind', strsplit(as.character(INFLO_DATA$Interaction),':',fixed=TRUE)))
+  colnames(R1) <- c("Target","Parents")
+  R1$Parents <- gsub(" ","_",R1$Parents)
+  R1$Target <- gsub(" ","_",R1$Target)
+  R1$Parents <- gsub(",_","*",R1$Parents)
+  R1$Parents <- gsub("\\(","",R1$Parents)
+  R1$Parents <- gsub("\\)","",R1$Parents)
+  
+  INFLO_DATA <- cbind(R1,INFLO_DATA)
+  
+  INFLO_DATA <- INFLO_DATA[,c("pathway_name","pathway_num","int_file","Interaction","Target","Parents",colnames(INFLO_DATA)[c(7:length(INFLO_DATA[1,]))])]
+  
+  return(INFLO_DATA)
+}
 
 
 
