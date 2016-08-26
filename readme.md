@@ -3,10 +3,6 @@
 ##### For Academic/Non-Profit use
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>
 
-
-##### For Non-Academic/For-Profit use:
-Please contact us at varadanlab@gmail.com for licensing options. 
-
 ##### For Technical Support:
 Send us email at varadanlab@gmail.com
 
@@ -74,9 +70,7 @@ The R script does the following jobs
  * Read the initial files
  * Check for the duplicate genes, and eliminate redundancy using maximum absolute deviation, and select only genes that are present in all three data types. 
  * Check for sample names and eliminate the samples which are not present in all provided data types. 
- * Run the gene wise Wilcoxon test or DeSeq Test(For RNASeqV2 Data) on the Tumor Gene Expression V/s the Normal Gene Expression and generates probability of each gene being up/down regulated in the individual tumor sample as compared to the control samples
- * Run the gene wise Wilcoxon test on the Tumor Somatic Copy Number V/s the Normal Somatic Copy Number and generates a probability of copy-number alteration (amplification or deletion) in the tumor sample as compared to the control samples on a per-gene basis.
- * Run the gene wise Wilcoxon test on the Tumor Methylation Data  V/s the Normal Methylation data and generates a probability of Methylation events (Methylated or Demethylated) in the tumor sample as compared to the control samples on a per-gene basis
+ *Compares gene expression (either microarray or RNASeq), copy-number (SNP 6.0 arrays or whole-exome sequencing), and DNA Methylation profiles of tumors versus controls and generates probability of each gene being up/down regulated in the individual tumor sample as compared to the control samples
  
  <b>The required condition for above tests is that a Data type should have atleast 3 Normal Samples.</b>
 
