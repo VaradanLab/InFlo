@@ -70,7 +70,7 @@ The R script does the following jobs
  * Read the initial files
  * Check for the duplicate genes, and eliminate redundancy using maximum absolute deviation, and select only genes that are present in all three data types. 
  * Check for sample names and eliminate the samples which are not present in all provided data types. 
- *Compares gene expression (either microarray or RNASeq), copy-number (SNP 6.0 arrays or whole-exome sequencing), and DNA Methylation profiles of tumors versus controls and generates probability of each gene being up/down regulated in the individual tumor sample as compared to the control samples
+ * Compares gene expression (either microarray or RNASeq), copy-number (SNP 6.0 arrays or whole-exome sequencing), and DNA Methylation profiles of tumors versus controls and generates probability of each gene being up/down regulated in the individual tumor sample as compared to the control samples
  
  <b>The required condition for above tests is that a Data type should have atleast 3 Normal Samples.</b>
 
