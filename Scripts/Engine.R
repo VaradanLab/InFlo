@@ -369,7 +369,7 @@ Guass_Fit <- function(X){
       print(l)
       
       fit_data <- cbind(tumor_matrix[,l],normal_matrix)
-      tryCatch({processed_tumor_matrix[,l] <- apply(Dat,1,function(x){normalmixEM(na.omit(unlist(fit_data)),k=2,maxit=50,epsilon=0.01)$loglik})}, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+      tryCatch({processed_tumor_matrix[,l] <- apply(Dat,1,function(x){2^as.numeric(normalmixEM(na.omit(unlist(fit_data)),k=2,maxit=50,epsilon=0.01)$loglik)})}, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
     }
     colnames(processed_tumor_matrix) = colnames(tumor_matrix)
     rownames(processed_tumor_matrix) = rownames(tumor_matrix)
