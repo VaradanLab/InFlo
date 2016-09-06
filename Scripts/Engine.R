@@ -92,9 +92,9 @@ dwnPack("tidyr")
 dwnPack("dplyr")
 dwnPack("survival")
 dwnPack("DESeq2")
-
-
-
+dwnPack("stats")
+dwnPack("modeest")
+dwnPack("mixtools")
 ################################################################################################################################
 
 Data_Read <- function(X){
@@ -352,5 +352,28 @@ Post_Info <- function(X){
   return(INFLO_DATA)
 }
 
-
-
+Guass_Fit <- function(X){
+  Dat <- X
+  tumor_samples <- intersect(tumor_samples,colnames(Dat))
+  normal_samples <- intersect(normal_samples,colnames(Dat))
+  if(length(normal_samples)>=3){
+    tumor_matrix <- Dat[,tumor_samples]
+    normal_matrix <- Dat[,normal_samples]
+    #normal_matrix <- normal_matrix[rownames(tumor_matrix),]
+    
+    processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
+    
+    Dat <- cbind(tumor_matrix,normal_matrix)
+    processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
+    for(l in 1:length(tumor_samples)){
+      print(l)
+      
+      fit_data <- cbind(tumor_matrix[,l],normal_matrix)
+      tryCatch({processed_tumor_matrix[,l] <- apply(Dat,1,function(x){normalmixEM(na.omit(unlist(fit_data)),k=2,maxit=50,epsilon=0.01)$loglik})}, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+    }
+    colnames(processed_tumor_matrix) = colnames(tumor_matrix)
+    rownames(processed_tumor_matrix) = rownames(tumor_matrix)
+    
+    return(processed_tumor_matrix)
+    }
+}
