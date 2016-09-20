@@ -1,9 +1,12 @@
 # Inflo Config File, Provide the information about the Gene Expression file , Somatic Copy Number file
 
 
+InFlo_Home = "/Projects/VaradanLab_Repositories/InFlo"
+
+
+
+
 Info_File = "/Projects/inFlo_repository/extra/Info.txt"
-
-
 
 ##Gene Expression Files and Options
 

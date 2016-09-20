@@ -1,0 +1,1 @@
+Patient#	Sample#	AURKB:(AURKB, protein),	AURKC:(AURKC, protein),	INCENP:(INCENP, protein),	Aurora C/Aurora B/INCENP:(AURKB, active),(AURKC, active),(INCENP, active),(anaphase, active),(metaphase, active),	Histone H3:(Aurora C/Aurora B/INCENP, active),(Histone H3, protein),(mitosis, active),	

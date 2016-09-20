@@ -1,0 +1,1 @@
+Patient#	Sample#	Syndecan Family:(Syndecan Family, protein),	SDC1:(SDC1, protein),(Syndecan Family, active),	SDC2:(SDC2, protein),(Syndecan Family, active),	SDC3:(SDC3, protein),(Syndecan Family, active),	SDC4:(SDC4, protein),(Syndecan Family, active),	

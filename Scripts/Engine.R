@@ -1,8 +1,52 @@
-PATHWAYS_INTERACTION_NETWORK <- read.table("/Projects/InFlo_Analysis/Inflo-code/Pathways/PATHWAYS_INTERACTION_NETWORK.txt",sep="\t",header=T,check.names = F,stringsAsFactors = F)
+#!/usr/bin/env Rscript
+
+##Note : Check the directories again and again for any further changes. 
+
+######################################################################################################################################################################
+######Initial files, make it soft coded##########################
+File_chk <- function()
+{
+  Run_Test <<- ifelse(dir.exists(InFlo_Home),TRUE,FALSE)
+  InFlo_core_file <<- paste(InFlo_Home,"/InFlo/inFlo",sep="")
+  Run_Test <- ifelse(file.exists(InFlo_core_file),TRUE,FALSE)
+  Engine <<- paste(InFlo_Home,"/Scripts/Engine.R",sep="")
+  Engine_Test <<- ifelse(file.exists(Engine),TRUE,FALSE)
+  Interaction_Dir <- paste(InFlo_Home,"/Support_Files/Interactions/",sep="")
+  Interaction_Files <- list.files(Interaction_Dir)
+  Run_Test <- ifelse(length(Interaction_Files)>0,TRUE,FALSE)
+  Pathway_Comps <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_COMPONENT_NETWORK.txt",sep="")
+  Pathway_Interactions <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_INTERACTION_NETWORK.txt",sep="")
+  Run_Test <<- ifelse(file.exists(Pathway_Comps),TRUE,FALSE)
+  Run_Test <<- ifelse(file.exists(Pathway_Interactions),TRUE,FALSE)
+  ana <<- paste(InFlo_Home,"Analysis",sep='/')
+  Run_Test <<- ifelse(dir.exists(ana),TRUE,FALSE)
+  return(Run_Test)
+}
+
+Dir_create <- function(Run_Test)
+{
+  if(Run_Test){
+    anaPath <<- paste(ana,(paste("Analysis",toString(strftime(Sys.time(),format="%d_%m_%Y_%H_%M")),sep='_')),sep ="/")
+    anaTemp <<-paste(anaPath,"temp",sep='/')
+  }
+  
+  
+  
+  
+  
+}
+
+PATHWAYS_INTERACTION_NETWORK <- read.table("paste(/Projects/InFlo_Analysis/Inflo-code/Pathways/PATHWAYS_INTERACTION_NETWORK.txt",sep="\t",header=T,check.names = F,stringsAsFactors = F)
 PATHWAYS_COMPONENT_NETWORK <- read.table("/Projects/InFlo_Analysis/Inflo-code/Pathways/PATHWAYS_COMPONENT_NETWORK.txt",sep="\t",header=T,check.names = F,stringsAsFactors = F)
 
 Interaction_Dir <- "/Projects/InFlo_Analysis/Inflo-code/ovarian_cancer_Inflo_data/Interactions"
 Interaction_names <- read.delim("/Projects/InFlo_Analysis/Inflo-code/Pathways/names.tab",header = T,sep="\t")
+#################################################################
+#################################################################
+#################################################################
+
+#######Required_Files Check##############
+
 
 
 
@@ -23,14 +67,10 @@ dwnPack <- function(x)
 }
 
 ####################################################################################################
+
+
+
 ###########################################~~~~Run_Check~~~~~##############################################
-
-#!/usr/bin/env Rscript
-
-##Note : Check the directories again and again for any further changes. 
-
-######################################################################################################################################################################
-
 run_chk <- function()
 {
   args <- commandArgs(trailingOnly = TRUE)
@@ -73,11 +113,11 @@ run_chk <- function()
     }
   }
 }
+#########################################################################################
 
 
 
 
-Dir_Create <- function()
 ################################################################################################################################
 
 dwnPack("marray")
@@ -352,6 +392,9 @@ Post_Info <- function(X){
   return(INFLO_DATA)
 }
 
+
+
+#####################Guassian-fit Modelling################################################################
 Guass_Fit <- function(X){
   Dat <- X
   tumor_samples <- intersect(tumor_samples,colnames(Dat))

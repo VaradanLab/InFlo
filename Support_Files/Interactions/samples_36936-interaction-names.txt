@@ -1,0 +1,1 @@
+Patient#	Sample#	MAP2K1:(MAP2K1, protein),(PI3K Class IB family, active),	PDE3B:(PDE3B, protein),	MAPK1:(MAP2K1, active),(MAPK1, protein),	PI3K Class IB/PDE3B:(PDE3B, active),(PI3K Class IB family, active),	cAMP biosynthetic process:(PI3K Class IB/PDE3B, active),(cAMP, active),	
