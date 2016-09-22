@@ -9,17 +9,24 @@ File_chk <- function()
   Run_Test <<- ifelse(dir.exists(InFlo_Home),TRUE,FALSE)
   InFlo_core_file <<- paste(InFlo_Home,"/InFlo/inFlo",sep="")
   Run_Test <- ifelse(file.exists(InFlo_core_file),TRUE,FALSE)
-  Engine <<- paste(InFlo_Home,"/Scripts/Engine.R",sep="")
-  Engine_Test <<- ifelse(file.exists(Engine),TRUE,FALSE)
-  Interaction_Dir <- paste(InFlo_Home,"/Support_Files/Interactions/",sep="")
-  Interaction_Files <- list.files(Interaction_Dir)
-  Run_Test <- ifelse(length(Interaction_Files)>0,TRUE,FALSE)
+  #Engine <<- paste(InFlo_Home,"/Scripts/Engine.R",sep="")
+  #Engine_Test <<- ifelse(file.exists(Engine),TRUE,FALSE)
+  Interaction_Dir <<- paste(InFlo_Home,"/Support_Files/Interactions/",sep="")
+  Interaction_Files <<- list.files(Interaction_Dir)
+  Interaction_names <<- read.delim(paste(InFlo_Home,"/Support_Files/names.tab",sep=""),header = T,sep="\t")
+  Run_Test <<- ifelse(length(Interaction_Files)>0,TRUE,FALSE)
   Pathway_Comps <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_COMPONENT_NETWORK.txt",sep="")
+  PATHWAYS_COMPONENT_NETWORK <<- read.table(Pathway_Comps,sep="\t",header=T,check.names = F,stringsAsFactors = F)
   Pathway_Interactions <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_INTERACTION_NETWORK.txt",sep="")
+  PATHWAYS_INTERACTION_NETWORK <<- read.table(Pathway_Interactions,header=T,check.names = F,stringsAsFactors = F)
+  Pathways <<- paste(InFlo_Home,"/pathways.zip",sep="")
   Run_Test <<- ifelse(file.exists(Pathway_Comps),TRUE,FALSE)
   Run_Test <<- ifelse(file.exists(Pathway_Interactions),TRUE,FALSE)
   ana <<- paste(InFlo_Home,"Analysis",sep='/')
   Run_Test <<- ifelse(dir.exists(ana),TRUE,FALSE)
+  Run_Test <<- ifelse(file.exists(CNV_FILE),TRUE,FALSE)
+  Run_Test <<- ifelse(file.exists(GE_FILE),TRUE,FALSE)
+  Run_Test <<- ifelse(file.exists(METH_FILE),TRUE,FALSE)
   return(Run_Test)
 }
 
@@ -27,7 +34,19 @@ Dir_create <- function(Run_Test)
 {
   if(Run_Test){
     anaPath <<- paste(ana,(paste("Analysis",toString(strftime(Sys.time(),format="%d_%m_%Y_%H_%M")),sep='_')),sep ="/")
+    dir.create(anaPath,showWarnings = T)
+    anaInput <<- paste(anaPath,"Input",sep='/')
+    dir.create(anaInput,showWarnings = T)
+    file.copy(c(CNV_FILE,GE_FILE),anaInput)
     anaTemp <<-paste(anaPath,"temp",sep='/')
+    dir.create(anaTemp,showWarnings = T)
+    file.copy(Pathways,anaTemp)
+    Pathways <<- paste(anaTemp,"/pathways.zip",sep="")
+    unzip(zipfile = Pathways,exdir = anaTemp)
+    ResPath <- paste(anaPath,"/Results",sep="")
+    dir.create(ResPath,showWarnings = T)
+    GE_FILE <<- paste(anaInput,as.character(unlist(strsplit(GE_FILE,split = "/"))[length(unlist(strsplit(GE_FILE,split = "/")))]),sep="/")
+    CNV_FILE <<- paste(anaInput,as.character(unlist(strsplit(CNV_FILE,split = "/"))[length(unlist(strsplit(CNV_FILE,split = "/")))]),sep="/")
   }
   
   
@@ -36,22 +55,6 @@ Dir_create <- function(Run_Test)
   
 }
 
-PATHWAYS_INTERACTION_NETWORK <- read.table("paste(/Projects/InFlo_Analysis/Inflo-code/Pathways/PATHWAYS_INTERACTION_NETWORK.txt",sep="\t",header=T,check.names = F,stringsAsFactors = F)
-PATHWAYS_COMPONENT_NETWORK <- read.table("/Projects/InFlo_Analysis/Inflo-code/Pathways/PATHWAYS_COMPONENT_NETWORK.txt",sep="\t",header=T,check.names = F,stringsAsFactors = F)
-
-Interaction_Dir <- "/Projects/InFlo_Analysis/Inflo-code/ovarian_cancer_Inflo_data/Interactions"
-Interaction_names <- read.delim("/Projects/InFlo_Analysis/Inflo-code/Pathways/names.tab",header = T,sep="\t")
-#################################################################
-#################################################################
-#################################################################
-
-#######Required_Files Check##############
-
-
-
-
-
-###########~~~~~~~~~Download Required Package~~~~~~~~~~~~~~~~~########################
 dwnPack <- function(x)
 {
   if(!require(x,character.only = TRUE))
@@ -242,7 +245,7 @@ PRE_INFLO <- function(X,Y,Z){
   
   
   
-  pathway_dir <- Y
+  pathway_dir <- Z
   pathway_files <- list.files(pathway_dir, pattern = "_pathway.tab$")
   
   
@@ -288,11 +291,29 @@ PRE_INFLO <- function(X,Y,Z){
   }
 }
 
+
+
 InFlo <- function(X,Y){
+  InFlo_core_file
   PATHWAY_DIR <- X
   RESULT_DIR <- Y
-  setwd(INFLO_DIR)
-  #Cmd <- 
+  for(i in c(36871,36872,36874,36875,36876,36877,36878,36879,36880,36881,36882,36884,36885,36886,
+             36887,36888,36889,36890,36891,36892,36893,36894,36895,36896,36897,36898,36899,36901,
+             36902,36903,36905,36906,36907,36908,36909,36910,36911,36912,36913,36914,36915,36916,
+             36918,36919,36920,36921,36922,36923,36924,36927,36928,36929,36930,36931,36932,36934,
+             36935,36936,36937,36938,36939,36940,36941,36942,36943,36944,36945,36946,36947,36948,
+             36949,36950,36951,36952,36953,36954,36955,36956,36957,36958,36959,36961,36962,36963,
+             36964,36965,36966,36967,36968,36969,36970,36971,36972,36973,36974,36975,36976,36977,
+             36978,36979,36980,36981,36982,36983,36984,36985,36986,36987,36988,36989,36990,36991,
+             36992,36993,36994,36995,36996,36997,36998,37000,37001,37002,37003,37004,37005,37006,
+             37007,37008,37009,37010,37011,37012,37013,37014,37015,37016,37017,37018,37019,37020,
+             37021,37022,37023,37024,37025,37026,37027,37028,37029,37030,37031,37032,37033,37034,
+             37035,37036,37037,37038,37040,37041,37042,37043,37044,37045,37046,37047,37048,37049,
+             37050,37051,37052,37053,37054,37055,37056)){
+    print(paste("Executive Pathway ",i))
+    sys_cmd <- paste(InFlo_core_file,X,"/pid_",i,"_pathway.tab"," -c em_simple.cfg -b ",X,"/pid_",i,"_pathway -r 1 > ",Y,"/samples_",i,"-inconsistentOK-blackballing.txt")
+    system(sys_cmd)
+  }
 }
 
 Post_Info <- function(X){
