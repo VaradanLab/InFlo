@@ -95,7 +95,7 @@ The R script does the following jobs
 
 <p> InFlo generates the probability of activation or inactivation of specific interactions in the pathway file on a per-tumor sample basis by modeling the pathway activity using the gene expression and copy-number data processed</p>
 
-<p>As soon InFlo finishes producing the data user have to use the "Post_Process.R" scripts, which takes up the InFlo results files and Finds out the significant interactions among various Pathways.</p>
+<p>The user can do required downstream analysis based on its requirement.</p>
 ================================================================================================================================
 
 ###For any queries kindly mail us at varadanlab@gmail.com
