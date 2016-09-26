@@ -1,16 +1,12 @@
 #!/usr/bin/env Rscript
 
-##Note : Check the directories again and again for any further changes. 
-
 ######################################################################################################################################################################
-######Initial files, make it soft coded##########################
+##The Following fucntion checks for all the required files. 
 File_chk <- function()
 {
   Run_Test <<- ifelse(dir.exists(InFlo_Home),TRUE,FALSE)
   InFlo_core_file <<- paste(InFlo_Home,"/InFlo/inFlo",sep="")
   Run_Test <- ifelse(file.exists(InFlo_core_file),TRUE,FALSE)
-  #Engine <<- paste(InFlo_Home,"/Scripts/Engine.R",sep="")
-  #Engine_Test <<- ifelse(file.exists(Engine),TRUE,FALSE)
   Interaction_Dir <<- paste(InFlo_Home,"/Support_Files/Interactions/",sep="")
   Interaction_Files <<- list.files(Interaction_Dir)
   Interaction_names <<- read.delim(paste(InFlo_Home,"/Support_Files/names.tab",sep=""),header = T,sep="\t")
@@ -30,6 +26,8 @@ File_chk <- function()
   return(Run_Test)
 }
 
+####################################################################################################
+##The following function creates the analysis directory, copies the input_files and pathways to the new analysis directory with a unique time stamp.  
 Dir_create <- function(Run_Test)
 {
   if(Run_Test){
@@ -48,13 +46,10 @@ Dir_create <- function(Run_Test)
     GE_FILE <<- paste(anaInput,as.character(unlist(strsplit(GE_FILE,split = "/"))[length(unlist(strsplit(GE_FILE,split = "/")))]),sep="/")
     CNV_FILE <<- paste(anaInput,as.character(unlist(strsplit(CNV_FILE,split = "/"))[length(unlist(strsplit(CNV_FILE,split = "/")))]),sep="/")
   }
-  
-  
-  
-  
-  
 }
 
+####################################################################################################
+# The following function downloads all the required R packages. 
 dwnPack <- function(x)
 {
   if(!require(x,character.only = TRUE))
@@ -68,12 +63,8 @@ dwnPack <- function(x)
     }
   }
 }
-
 ####################################################################################################
-
-
-
-###########################################~~~~Run_Check~~~~~##############################################
+# The following function checks the user input for the config file. and returns possible options. 
 run_chk <- function()
 {
   args <- commandArgs(trailingOnly = TRUE)
@@ -116,13 +107,8 @@ run_chk <- function()
     }
   }
 }
-#########################################################################################
-
-
-
-
-################################################################################################################################
-
+####################################################################################################
+###################################################################################################
 dwnPack("marray")
 dwnPack("stringr")
 dwnPack("plyr")
@@ -138,8 +124,9 @@ dwnPack("DESeq2")
 dwnPack("stats")
 dwnPack("modeest")
 dwnPack("mixtools")
-################################################################################################################################
-
+dwnPack("doParallel")
+###################################################################################################
+# Function to read the Data files. and check for If the file consists of duplicate sample names or gene names. 
 Data_Read <- function(X){
   Data2 <- read.table(X,sep="\t",header=T,check.names = F, stringsAsFactors = F)
   if(length(Data2[,'Gene_Name'])==length(unique(Data2[,'Gene_Name']))){
@@ -150,7 +137,9 @@ Data_Read <- function(X){
       print("Duplicate_Gene_Names")
   }
 }
-  
+
+####################################################################################################
+# Function to perform Wilcox test between each tumor sample with the provided Normal samples. 
 Wilcox_Test <- function(X){
   Dat <- X
   tumor_samples <- intersect(tumor_samples,colnames(Dat))
@@ -158,34 +147,27 @@ Wilcox_Test <- function(X){
   if(length(normal_samples)>=3){
     tumor_matrix <- Dat[,tumor_samples]
     normal_matrix <- Dat[,normal_samples]
-    #normal_matrix <- normal_matrix[rownames(tumor_matrix),]
-    
     processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
-    
     Dat <- cbind(tumor_matrix,normal_matrix)
     processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
-    
-    
     for(l in 1:length(tumor_samples)){
       print(l)
       tryCatch({processed_tumor_matrix[,l] <- apply(Dat,1,function(x){if(is.na(x[tumor_samples[l]])){NA}else{normal_vector <- x[normal_samples]; result <- wilcox.test(as.numeric(normal_vector),x[tumor_samples[l]])$p.value; if(x[tumor_samples[l]] <= median(as.numeric(normal_vector),na.rm=T)){-1*result}else{result}}})}, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
     }
     colnames(processed_tumor_matrix) = colnames(tumor_matrix)
     rownames(processed_tumor_matrix) = rownames(tumor_matrix)
-    
     return(processed_tumor_matrix)
   }
 }
+####################################################################################################
 
 
-
-
+####################################################################################################
+## If user selects RNASeqV2 as true, the following function does a DeSeq test on the expression data. 
 DeSEQ_TEST <- function(X){
-  
   Dat <-X
   tumor_matrix <- Dat[,tumor_samples]
   normal_matrix <- Dat[,normal_samples]
-  
   
   DEFSEQ_RES <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
   colnames(DEFSEQ_RES) = colnames(tumor_matrix)
@@ -217,7 +199,10 @@ DeSEQ_TEST <- function(X){
   return(DEFSEQ_RES)
 }
 
-
+####################################################################################################
+## The following funtion is a pre Inflo check that arranges the expression and CNV data in the same 
+## order of sample names and gene names and creates the Pathways specific *_mRNA.tab files and
+## *_Genome.tab files.
 PRE_INFLO <- function(X,Y,Z){
   exp <- X
   fac <- Y
@@ -243,11 +228,8 @@ PRE_INFLO <- function(X,Y,Z){
   # Read in pathway genes
   # the arguement should be a readable file (pid_1_pathway.tab)
   
-  
-  
   pathway_dir <- Z
   pathway_files <- list.files(pathway_dir, pattern = "_pathway.tab$")
-  
   
   for(i in 1:length(pathway_files)){
     print(i)
@@ -291,7 +273,8 @@ PRE_INFLO <- function(X,Y,Z){
   }
 }
 
-
+####################################################################################################
+## The following function runs the pathways specific InFlo core over the provided number of cores. 
 
 InFlo <- function(X,Y){
   InFlo_core_file
@@ -316,6 +299,10 @@ InFlo <- function(X,Y){
   }
 }
 
+
+####################################################################################################
+## The following function comboines the pathway level Inflo results and combine them to give a
+## final report that can be used for further downstream analysis. 
 Post_Info <- function(X){
   Inflo_Res_Dir <- X
   Inflo_means_Dir <- paste(Inflo_Res_Dir,"_MEAN",sep="")
@@ -412,32 +399,34 @@ Post_Info <- function(X){
   
   return(INFLO_DATA)
 }
+####################################################################################################
 
 
-
-#####################Guassian-fit Modelling################################################################
-Guass_Fit <- function(X){
-  Dat <- X
-  tumor_samples <- intersect(tumor_samples,colnames(Dat))
-  normal_samples <- intersect(normal_samples,colnames(Dat))
-  if(length(normal_samples)>=3){
-    tumor_matrix <- Dat[,tumor_samples]
-    normal_matrix <- Dat[,normal_samples]
-    #normal_matrix <- normal_matrix[rownames(tumor_matrix),]
-    
-    processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
-    
-    Dat <- cbind(tumor_matrix,normal_matrix)
-    processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
-    for(l in 1:length(tumor_samples)){
-      print(l)
-      
-      fit_data <- cbind(tumor_matrix[,l],normal_matrix)
-      tryCatch({processed_tumor_matrix[,l] <- apply(Dat,1,function(x){2^as.numeric(normalmixEM(na.omit(unlist(fit_data)),k=2,maxit=50,epsilon=0.01)$loglik)})}, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
-    }
-    colnames(processed_tumor_matrix) = colnames(tumor_matrix)
-    rownames(processed_tumor_matrix) = rownames(tumor_matrix)
-    
-    return(processed_tumor_matrix)
-    }
-}
+#####################Guassian-fit Modelling#########################################################
+## We also tried fitting data over guassian models. but not using in the main pipepline. 
+# Guass_Fit <- function(X){
+#   Dat <- X
+#   tumor_samples <- intersect(tumor_samples,colnames(Dat))
+#   normal_samples <- intersect(normal_samples,colnames(Dat))
+#   if(length(normal_samples)>=3){
+#     tumor_matrix <- Dat[,tumor_samples]
+#     normal_matrix <- Dat[,normal_samples]
+#     #normal_matrix <- normal_matrix[rownames(tumor_matrix),]
+#     
+#     processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
+#     
+#     Dat <- cbind(tumor_matrix,normal_matrix)
+#     processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
+#     for(l in 1:length(tumor_samples)){
+#       print(l)
+#       
+#       fit_data <- cbind(tumor_matrix[,l],normal_matrix)
+#       tryCatch({processed_tumor_matrix[,l] <- apply(Dat,1,function(x){2^as.numeric(normalmixEM(na.omit(unlist(fit_data)),k=2,maxit=50,epsilon=0.01)$loglik)})}, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+#     }
+#     colnames(processed_tumor_matrix) = colnames(tumor_matrix)
+#     rownames(processed_tumor_matrix) = rownames(tumor_matrix)
+#     
+#     return(processed_tumor_matrix)
+#     }
+# }
+####################################################################################################
