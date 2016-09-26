@@ -59,11 +59,26 @@ The script was developed on the R platform with version 3.1, and it is assumed t
 
 You will need to run the "InFlo.R" script included in the InFlo package.
 
-    $ cd directory/to/InFlo
+    $ EXPORT num_of_cores=8 #User have to provide the number of cores available for the process. 
     $ RScript InFlo.R [-R] [location to InFlo_PROJ_Config.txt]
 for help :
 
     $ RScript InFlo.R [-H]
+
+To run InFlo on HPC. Slurm Script should look the following. 
+________________________________________________________________
+    #SBATCH -J RD_1ST
+    #SBATCH --time=320:00:00
+    #SBATCH --nodes=1
+    #SBATCH --cpus-per-task=8
+    #SBATCH --output=RD_1ST.out
+    #SBATCH --mem=20gb
+
+    module load gcc
+    EXPORT Number_of_Cores = cpus-per-task
+    RScript InFlo.R [-R] [location to InFlo_PROJ_Config.txt]
+_________________________________________________________________
+
 
 The R script does the following jobs
 
