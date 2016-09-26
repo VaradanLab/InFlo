@@ -67,8 +67,7 @@ for help :
 
 To run InFlo on HPC. Slurm Script should look the following. 
 ________________________________________________________________
-    #SBATCH -J RD_1ST
-    #SBATCH --time=320:00:00
+    #SBATCH -J InFlo_Job
     #SBATCH --nodes=1
     #SBATCH --cpus-per-task=8
     #SBATCH --output=RD_1ST.out
