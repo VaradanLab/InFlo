@@ -8,7 +8,7 @@ Send us email at varadanlab@gmail.com
 
 ==============================================================================================================================
 ###Reference
-#### Manuscript in press, NPG Oncogene
+*** Manuscript in press, NPG Oncogene***
 #### InFlo: A Novel Systems Biology Framework Identifies cAMP-CREB1 Axis as a Key Modulator of Platinum Resistance in Ovarian Cancer
 ***Nevenka Dimitrova, Anil Belur Nagaraj, Abolfazl Razi, Salendra Singh, Sitharthan Kamalakaran, Nilanjana Banerjee, Peronne Joseph, Alexander Mankovich, Prateek Mittal, Analisa DiFeo, Vinay Varadan***
 
