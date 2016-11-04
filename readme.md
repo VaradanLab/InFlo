@@ -51,6 +51,11 @@ The script was developed on the R platform with version 3.1, and it is assumed t
 <br> preferred Version : 0.2.5 (Provided with the package)
 
 ==============================================================================================================================
+##Downloading InFlo
+InFlo can be downloaded from github by recursively cloning the git repository
+
+   $ git clone https://github.com/VaradanLab/InFlo.git
+
 ##Running InFlo
 ##### Input Files : All the files should be Independent matrices(Genes as rows and samples as columns)
  * Gene Expression File
