@@ -22,7 +22,7 @@ File_chk <- function()
   Run_Test <<- ifelse(dir.exists(ana),TRUE,FALSE)
   Run_Test <<- ifelse(file.exists(CNV_FILE),TRUE,FALSE)
   Run_Test <<- ifelse(file.exists(GE_FILE),TRUE,FALSE)
-  Run_Test <<- ifelse(file.exists(METH_FILE),TRUE,FALSE)
+  #Run_Test <<- ifelse(file.exists(METH_FILE),TRUE,FALSE)
   return(Run_Test)
 }
 
