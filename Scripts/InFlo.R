@@ -10,7 +10,7 @@ args = commandArgs(trailingOnly=TRUE)
 registerDoParallel(cores=(Sys.getenv("Num_Of_Cores")))
 parallel_time <-system.time({
 source(args[2])
-source(paste(InFlo_Home,"/scripts/Engine.R",sep=""))
+source(paste(InFlo_Home,"/Scripts/Engine.R",sep=""))
 Run <- run_chk()
 if(Run){
 Initial_chk <- File_chk()
