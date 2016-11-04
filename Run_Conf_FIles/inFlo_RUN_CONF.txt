@@ -1,22 +1,22 @@
 # Inflo Config File, Provide the information about the Gene Expression file , Somatic Copy Number file
 
 
-InFlo_Home = "/Projects/VaradanLab_Repositories/InFlo"
+InFlo_Home = "/PATH/TO/InFlo"
 
 ##Gene Expression Files and Options
 
 RNASeqV2 <- TRUE
 
-GE_FILE = "/Projects/VaradanLab_Repositories/Extra/TCGA-OV_Expression_data.txt"
+GE_FILE = "/PATH-TO-EXPRESSION-DATA/Expression_data.txt"
 
 
 ## Somatic Copy Number Files and Options 
-CNV_FILE = "/Projects/VaradanLab_Repositories/Extra/TCGA-OV_CNV_data.txt"
+CNV_FILE = "/PATH-TO-CNV-DATA/CNV_data.txt"
 
 
-## DNA methylation Data 
+## ## DNA methylation Data  ( FOR FUTURE)
 
-METH_FILE = "/Projects/VaradanLab_Repositories/Extra/TCGA-OV_Methylation27_data.txt"
+##METH_FILE = "/PATH-TO-METHYLATION-DATA/Methylation_data.txt"
 
 ##### File consisting of information if sample is "Tumor" or "Normal"
-SAMPLE_INFORMATION <- "/Projects/VaradanLab_Repositories/InFlo/example_files/Sample.txt"
+SAMPLE_INFORMATION <- "/PATH-TO-SAMPLE-INFORMATION/Sample_Information.txt"
