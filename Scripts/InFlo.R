@@ -36,8 +36,8 @@ if(RNASeqV2){
 # }
 PATHWAYS <- paste(anaTemp,"/pathways/",sep="")
 PRE_INFLO(GE_WILCOX,CNV_WILCOX,PATHWAYS)
-InFlo(PATHWAYS,RESULTS_DIR)
-Post_Info(RESULTS_DIR)
+InFlo(PATHWAYS,ResPath)
+Post_Info(ResPath)
 }
 })[3]
 getDoParWorkers()
