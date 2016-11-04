@@ -64,7 +64,7 @@ InFlo can be downloaded from github by recursively cloning the git repository
 
 You will need to run the "InFlo.R" script included in the InFlo package.
 
-    $ EXPORT num_of_cores=8 #User have to provide the number of cores available for the process. 
+    $ EXPORT num_of_cores==8 #User have to provide the number of cores available for the process. 
     $ RScript InFlo.R [-R] [location to InFlo_PROJ_Config.txt]
 for help :
 
@@ -79,7 +79,7 @@ ________________________________________________________________
     #SBATCH --mem=20gb
 
     module load gcc
-    export Number_of_Cores = cpus-per-task
+    export Number_of_Cores==cpus-per-task
     RScript InFlo.R [-R] [location to InFlo_PROJ_Config.txt]
 _________________________________________________________________
 
