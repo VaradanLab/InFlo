@@ -34,7 +34,7 @@ if(RNASeqV2){
 #   GE_WILCOX <- Guass_Fit(GE_Data)
 #   CNV_WILCOX <- Guass_Fit(CNV_Data)
 # }
-PATHWAYS <- paste(anaTemp,"/pathways",sep="")
+PATHWAYS <- paste(anaTemp,"/pathways/",sep="")
 PRE_INFLO(GE_WILCOX,CNV_WILCOX,PATHWAYS)
 InFlo(PATHWAYS,RESULTS_DIR)
 Post_Info(RESULTS_DIR)
