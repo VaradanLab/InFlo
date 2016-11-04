@@ -3,11 +3,6 @@
 
 InFlo_Home = "/Projects/VaradanLab_Repositories/InFlo"
 
-
-
-
-Info_File = "/Projects/inFlo_repository/extra/Info.txt"
-
 ##Gene Expression Files and Options
 
 RNASeqV2 <- TRUE
@@ -23,5 +18,5 @@ CNV_FILE = "/Projects/VaradanLab_Repositories/Extra/TCGA-OV_CNV_data.txt"
 
 METH_FILE = "/Projects/VaradanLab_Repositories/Extra/TCGA-OV_Methylation27_data.txt"
 
-#####
+##### File consisting of information if sample is "Tumor" or "Normal"
 SAMPLE_INFORMATION <- "/Projects/VaradanLab_Repositories/InFlo/example_files/Sample.txt"
