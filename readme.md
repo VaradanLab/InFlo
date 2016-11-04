@@ -53,7 +53,7 @@ The script was developed on the R platform with version 3.1, and it is assumed t
 ==============================================================================================================================
 ##Downloading InFlo
 InFlo can be downloaded from github by recursively cloning the git repository
-
+   
    $ git clone https://github.com/VaradanLab/InFlo.git
 
 ##Running InFlo
