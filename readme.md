@@ -79,7 +79,7 @@ ________________________________________________________________
     #SBATCH --mem=20gb
 
     module load gcc
-    EXPORT Number_of_Cores = cpus-per-task
+    export Number_of_Cores = cpus-per-task
     RScript InFlo.R [-R] [location to InFlo_PROJ_Config.txt]
 _________________________________________________________________
 
