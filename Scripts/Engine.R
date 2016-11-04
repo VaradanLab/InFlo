@@ -294,7 +294,9 @@ InFlo <- function(X,Y){
              37035,37036,37037,37038,37040,37041,37042,37043,37044,37045,37046,37047,37048,37049,
              37050,37051,37052,37053,37054,37055,37056)){
     print(paste("Executive Pathway ",i))
+    
     sys_cmd <- paste(InFlo_core_file," ",X,"pid_",i,"_pathway.tab"," -c em_simple.cfg -b ",X,"pid_",i,"_pathway -r 1 > ",Y,"/samples_",i,"-inconsistentOK-blackballing.txt",sep="")
+    
     system(sys_cmd)
   }
 }
