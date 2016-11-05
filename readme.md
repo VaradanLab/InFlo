@@ -28,8 +28,8 @@ Hard Disk Space : The module needs around 300 MB of Hard Disk space.
 
 The performance of the tool depends on the processing capabilities of the machine. 
 
-The module performance was tested on two platforms 
-  * 2.8 GHz Intel Core i7 processor with 8 GB of RAM iMac machine
+The module performance was tested on the following platform
+
   * 32-core  2.10 GHz Intel(R) Xeon(R) CPU E5-2450 with 64 GB linux machine
 
 ###Software Architecture
