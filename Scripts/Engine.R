@@ -109,22 +109,31 @@ run_chk <- function()
 }
 ####################################################################################################
 ###################################################################################################
-dwnPack("marray")
-dwnPack("stringr")
-dwnPack("plyr")
-dwnPack("multtest")
-dwnPack("permute")
-dwnPack("IRanges")
-dwnPack("GenomicRanges")
-dwnPack("TCGAbiolinks")
-dwnPack("tidyr")
-dwnPack("dplyr")
-dwnPack("survival")
-dwnPack("DESeq2")
-dwnPack("stats")
-dwnPack("modeest")
-dwnPack("mixtools")
-dwnPack("doParallel")
+for(pack in c("marray","stringr","plyr","multtest","permute","IRanges","GenomicRanges","TCGAbiolinks","tidyr","dplyr","survival","DESeq2","stats","modeest","mixtools","doParallel"))
+  {
+    tryCatch({
+    dwnPack(pack)}, error=function(e){cat("Error :",conditionMessage(e)," ")})
+}
+
+
+
+
+# dwnPack("marray")
+# dwnPack("stringr")
+# dwnPack("plyr")
+# dwnPack("multtest")
+# dwnPack("permute")
+# dwnPack("IRanges")
+# dwnPack("GenomicRanges")
+# dwnPack("TCGAbiolinks")
+# dwnPack("tidyr")
+# dwnPack("dplyr")
+# dwnPack("survival")
+# dwnPack("DESeq2")
+# dwnPack("stats")
+# dwnPack("modeest")
+# dwnPack("mixtools")
+# dwnPack("doParallel")
 ###################################################################################################
 # Function to read the Data files. and check for If the file consists of duplicate sample names or gene names. 
 Data_Read <- function(X){
