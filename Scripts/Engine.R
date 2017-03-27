@@ -319,6 +319,7 @@ InFlo <- function(X,Y){
 Post_Info <- function(X){
   Inflo_Res_Dir <- X
   Inflo_means_Dir <- paste(Inflo_Res_Dir,"_MEAN",sep="")
+  dir.create(Inflo_means_Dir)
   Inflo_Res_Files <- list.files(path = Inflo_Res_Dir, pattern = "-inconsistentOK-blackballing.txt")
   
   
@@ -409,7 +410,7 @@ Post_Info <- function(X){
   INFLO_DATA <- cbind(R1,INFLO_DATA)
   
   INFLO_DATA <- INFLO_DATA[,c("pathway_name","pathway_num","int_file","Interaction","Target","Parents",colnames(INFLO_DATA)[c(7:length(INFLO_DATA[1,]))])]
-  
+  write.table(INFLO_DATA,paste(anaPath,"/InFLo_Results.txt",sep=""),sep="\t",row.names = F,col.names = T)
   return(INFLO_DATA)
 }
 ####################################################################################################
