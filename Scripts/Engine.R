@@ -5,8 +5,8 @@
 File_chk <- function()
 {
   Run_Test <<- ifelse(dir.exists(InFlo_Home),TRUE,FALSE)
-  InFlo_core_file <<- paste(InFlo_Home,"/InFlo/inFlo",sep="")
-  Run_Test <- ifelse(file.exists(InFlo_core_file),TRUE,FALSE)
+  InFlo_core_file <<- paste(InFlo_Home,"/InFlo/InFlo",sep="")
+  Run_Test <<- ifelse(file.exists(InFlo_core_file),TRUE,FALSE)
   Interaction_Dir <<- paste(InFlo_Home,"/Support_Files/Interactions/",sep="")
   Interaction_Files <<- list.files(Interaction_Dir)
   Interaction_names <<- read.delim(paste(InFlo_Home,"/Support_Files/names.tab",sep=""),header = T,sep="\t")
@@ -41,7 +41,7 @@ Dir_create <- function(Run_Test)
     file.copy(Pathways,anaTemp)
     Pathways <<- paste(anaTemp,"/pathways.zip",sep="")
     unzip(zipfile = Pathways,exdir = anaTemp)
-    ResPath <- paste(anaPath,"/Results",sep="")
+    ResPath <<- paste(anaPath,"/Results",sep="")
     dir.create(ResPath,showWarnings = T)
     GE_FILE <<- paste(anaInput,as.character(unlist(strsplit(GE_FILE,split = "/"))[length(unlist(strsplit(GE_FILE,split = "/")))]),sep="/")
     CNV_FILE <<- paste(anaInput,as.character(unlist(strsplit(CNV_FILE,split = "/"))[length(unlist(strsplit(CNV_FILE,split = "/")))]),sep="/")
@@ -178,6 +178,7 @@ DeSEQ_TEST <- function(X){
   rownames(DEFSEQ_RES2) = rownames(tumor_matrix)
   
   for(i in 1:length(tumor_matrix[1,])){
+    tryCatch({
     print(paste(i,colnames(tumor_matrix)[i],as.character(Sys.time()),sep="_"))
     reqd_mat <- cbind.data.frame(tumor_matrix[,i], normal_matrix)
     reqd_mat <- data.matrix(reqd_mat)
@@ -195,6 +196,7 @@ DeSEQ_TEST <- function(X){
     colnames(bck_Res_df2)[7] <- "new_Pval" 
     DEFSEQ_RES[,colnames(tumor_matrix)[i]] <- bck_Res_df2[,'new_Pval']
     DEFSEQ_RES2[,colnames(tumor_matrix)[i]] <- bck_Res_df2[,'log2FoldChange']
+    }, error=function(e){cat("Error :",conditionMessage(e)," ")})
   }
   return(DEFSEQ_RES)
 }
@@ -295,7 +297,7 @@ InFlo <- function(X,Y){
              37050,37051,37052,37053,37054,37055,37056)){
     print(paste("Executive Pathway ",i))
     
-    sys_cmd <- paste(InFlo_core_file," ",X,"pid_",i,"_pathway.tab"," -c em_simple.cfg -b ",X,"pid_",i,"_pathway -r 1 > ",Y,"/samples_",i,"-inconsistentOK-blackballing.txt",sep="")
+    sys_cmd <- paste(InFlo_core_file," -p ",PATHWAY_DIR,"pid_",i,"_pathway.tab"," -c ",InFlo_Home,"/InFlo/em_simple.cfg -b ",PATHWAY_DIR,"pid_",i,"_pathway -r 1 > ",RESULT_DIR,"/samples_",i,"-inconsistentOK-blackballing.txt",sep="")
     
     system(sys_cmd)
   }
