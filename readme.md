@@ -19,10 +19,10 @@ ________________________________________________________________
 ### Introduction
 ________________________________________________________________
 <p>InFlo is a novel systems biology approach for characterizing a complex cellular processes using a unique multidimensional framework integrating transcriptomic, genomic and/or epigenomic profiles for any given biological sample. InFlo robustly characterizes tissue-specific differences in activities of signaling networks on a genome scale using unique probabilistic models of molecular interactions on a per-sample basis. InFlo is proved to be a robust framework for both discovery of evidence-based biomarkers and therapeutic targets, as well as for facilitating selection of tailored therapies in individual patients.</p>
-==============================================================================================================================
+________________________________________________________________
 ### System Requirements
-==============================================================================================================================
-###Platforms and System Requirements
+________________________________________________________________
+### Platforms and System Requirements
 
 Hard Disk Space : The module needs around 300 MB of Hard Disk space.
 
@@ -50,7 +50,7 @@ The script was developed on the R platform with version 3.1, and it is assumed t
 * [**libDAI**](https://staff.fnwi.uva.nl/j.m.mooij/libDAI/) : A free and open source C++ library for Discrete Approximate Inference in graphical models.
 <br> preferred Version : 0.2.5 (Provided with the package)
 
-==============================================================================================================================
+________________________________________________________________
 ## Downloading InFlo
 InFlo can be downloaded from github by recursively cloning the git repository
    
@@ -101,6 +101,6 @@ The R script does the following jobs
 <p> InFlo generates the probability of activation or inactivation of specific interactions in the pathway file on a per-tumor sample basis by modeling the pathway activity using the gene expression and copy-number data processed</p>
 
 <p>The user can do required downstream analysis based on its requirement.</p>
-================================================================================================================================
+________________________________________________________________
 
 ### For any queries kindly mail us at varadanlab@gmail.com
