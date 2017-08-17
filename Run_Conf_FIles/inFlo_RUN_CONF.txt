@@ -1,17 +1,17 @@
 # Inflo Config File, Provide the information about the Gene Expression file , Somatic Copy Number file
 
 
-InFlo_Home = "/PATH/TO/InFlo"
+InFlo_Home = "/Projects/InFlo/InFlo_V2"
 
 ##Gene Expression Files and Options
 
 RNASeqV2 <- TRUE
 
-GE_FILE = "/PATH-TO-EXPRESSION-DATA/Expression_data.txt"
+GE_FILE = "/Projects/InFlo/InFlo_V2/example_files/Test_Expression.txt"
 
 
 ## Somatic Copy Number Files and Options 
-CNV_FILE = "/PATH-TO-CNV-DATA/CNV_data.txt"
+CNV_FILE = "/Projects/InFlo/InFlo_V2/example_files/Test_CNV.txt"
 
 
 ## ## DNA methylation Data  ( FOR FUTURE)
@@ -19,4 +19,6 @@ CNV_FILE = "/PATH-TO-CNV-DATA/CNV_data.txt"
 ##METH_FILE = "/PATH-TO-METHYLATION-DATA/Methylation_data.txt"
 
 ##### File consisting of information if sample is "Tumor" or "Normal"
-SAMPLE_INFORMATION <- "/PATH-TO-SAMPLE-INFORMATION/Sample_Information.txt"
+SAMPLE_INFORMATION <- "/Projects/InFlo/InFlo_V2/example_files/Test_INFO.txt"
+
+PATHWAY_INFORMATION <- ""

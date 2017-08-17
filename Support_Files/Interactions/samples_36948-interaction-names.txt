@@ -1,1 +1,0 @@
-Patient#	Sample#	EFNA5:(EFNA5, protein),	EPHA5:(EPHA5, protein),	Ephrin A5/EPHA5:(EFNA5, active),(EPHA5, active),(cell-cell signaling, active),	FYN:(Ephrin A5/EPHA5, active),(FYN, protein),	MAPKKK cascade:(Ephrin A5/EPHA5, active),	neuron projection morphogenesis:(Ephrin A5/EPHA5, active),	beta-integrin mediated adhesion:(FYN, active),(MAPKKK cascade, active),	

@@ -1,1 +1,0 @@
-Patient#	Sample#	GPC2:(GPC2, protein),	MDK:(MDK, protein),	GPC2/Midkine:(GPC2, active),(MDK, active),	neuron projection morphogenesis:(GPC2/Midkine, active),	

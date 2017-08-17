@@ -7,17 +7,19 @@ File_chk <- function()
   Run_Test <<- ifelse(dir.exists(InFlo_Home),TRUE,FALSE)
   InFlo_core_file <<- paste(InFlo_Home,"/InFlo/InFlo",sep="")
   Run_Test <<- ifelse(file.exists(InFlo_core_file),TRUE,FALSE)
-  Interaction_Dir <<- paste(InFlo_Home,"/Support_Files/Interactions/",sep="")
-  Interaction_Files <<- list.files(Interaction_Dir)
-  Interaction_names <<- read.delim(paste(InFlo_Home,"/Support_Files/names.tab",sep=""),header = T,sep="\t")
-  Run_Test <<- ifelse(length(Interaction_Files)>0,TRUE,FALSE)
-  Pathway_Comps <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_COMPONENT_NETWORK.txt",sep="")
-  PATHWAYS_COMPONENT_NETWORK <<- read.table(Pathway_Comps,sep="\t",header=T,check.names = F,stringsAsFactors = F)
-  Pathway_Interactions <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_INTERACTION_NETWORK.txt",sep="")
-  PATHWAYS_INTERACTION_NETWORK <<- read.table(Pathway_Interactions,header=T,check.names = F,stringsAsFactors = F)
-  Pathways <<- paste(InFlo_Home,"/pathways.zip",sep="")
-  Run_Test <<- ifelse(file.exists(Pathway_Comps),TRUE,FALSE)
-  Run_Test <<- ifelse(file.exists(Pathway_Interactions),TRUE,FALSE)
+  #Interaction_Dir <<- paste(InFlo_Home,"/Support_Files/Interactions/",sep="")
+  #Interaction_Files <<- list.files(Interaction_Dir)
+  #Interaction_names <<- read.delim(paste(InFlo_Home,"/Support_Files/names.tab",sep=""),header = T,sep="\t")
+  #Run_Test <<- ifelse(length(Interaction_Files)>0,TRUE,FALSE)
+  Run_Test <<- ifelse(file.exists(PATHWAY_INFORMATION),TRUE,FALSE)
+  Run_Test <<- ifelse(dir.exists(PATHWAYS_DIR),TRUE,FALSE)
+  #Pathway_Comps <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_COMPONENT_NETWORK.txt",sep="")
+  #PATHWAYS_COMPONENT_NETWORK <<- read.table(Pathway_Comps,sep="\t",header=T,check.names = F,stringsAsFactors = F)
+  #Pathway_Interactions <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_INTERACTION_NETWORK.txt",sep="")
+  #PATHWAYS_INTERACTION_NETWORK <<- read.table(Pathway_Interactions,header=T,check.names = F,stringsAsFactors = F)
+  #Pathways <<- paste(InFlo_Home,"/pathways.zip",sep="")
+  #Run_Test <<- ifelse(file.exists(Pathway_Comps),TRUE,FALSE)
+  #Run_Test <<- ifelse(file.exists(Pathway_Interactions),TRUE,FALSE)
   ana <<- paste(InFlo_Home,"Analysis",sep='/')
   Run_Test <<- ifelse(dir.exists(ana),TRUE,FALSE)
   Run_Test <<- ifelse(file.exists(CNV_FILE),TRUE,FALSE)
@@ -38,11 +40,15 @@ Dir_create <- function(Run_Test)
     file.copy(c(CNV_FILE,GE_FILE),anaInput)
     anaTemp <<-paste(anaPath,"temp",sep='/')
     dir.create(anaTemp,showWarnings = T)
-    file.copy(Pathways,anaTemp)
-    Pathways <<- paste(anaTemp,"/pathways.zip",sep="")
-    unzip(zipfile = Pathways,exdir = anaTemp)
+    #file.copy(Pathways,anaTemp)
+    PathDir <<- paste(anaPath,"/pathways",sep="")
+    dir.create(PathDir,showWarnings = T)
+    #dir.create(anaTemp,showWarnings = T)
+    #unzip(zipfile = Pathways,exdir = anaTemp)
     ResPath <<- paste(anaPath,"/Results",sep="")
+    ResPathPath <<- paste(ResPath,"/PATHWAYS",sep="")
     dir.create(ResPath,showWarnings = T)
+    dir.create(ResPathPath,showWarnings = T)
     GE_FILE <<- paste(anaInput,as.character(unlist(strsplit(GE_FILE,split = "/"))[length(unlist(strsplit(GE_FILE,split = "/")))]),sep="/")
     CNV_FILE <<- paste(anaInput,as.character(unlist(strsplit(CNV_FILE,split = "/"))[length(unlist(strsplit(CNV_FILE,split = "/")))]),sep="/")
   }
@@ -169,6 +175,60 @@ Wilcox_Test <- function(X){
   }
 }
 ####################################################################################################
+PATH_PROCESS <- function(X,Y){
+  
+  Run_PathInfo <- X
+  Run_PathDir <- Y
+  Run_ReqdPaths <- read.delim(Run_PathInfo,sep="\t",header = T,check.names = F,stringsAsFactors = F)
+  Run_ReqdPaths$Old_Location <- paste(Run_PathDir,Run_ReqdPaths[,"FileName"],sep="/")
+  Run_ReqdPaths$New_Location <- paste(PathDir,"/","pid_",Run_ReqdPaths[,"PID"],"_pathway.tab",sep="")
+  RUN_COMPONENTS <<- NULL
+  RUN_INTERACTIONS <<- NULL
+  RUN_PIDS <<- NULL
+  AVAIL_PATHS <<- NULL
+  for(i in 1:length(Run_ReqdPaths[,1])){
+    if(file.copy(from = Run_ReqdPaths[i,"Old_Location"],to = Run_ReqdPaths[i,"New_Location"],overwrite = F,recursive = F)){
+      print(i)
+      RUN_PIDS <<- c(RUN_PIDS,Run_ReqdPaths[i,"PID"])
+      path <- Run_ReqdPaths[i,"New_Location"]
+      print(path)
+      max_count_field <- max(count.fields(path,sep="\t"),na.rm = T)
+      Pathway_data <- read.table(path,sep = "\t",header = F,fill = T,strip.white = T,stringsAsFactors = F,col.names = 1:max_count_field)
+      colnames(Pathway_data) <- c("c1","c2","c3")
+      Pathway_data$c2 <- gsub(" ","_",Pathway_data$c2)
+      Pathway_data$c1 <- gsub(" ","_",Pathway_data$c1)
+      #colnames(Pathway)
+      
+      Pathway_comp <- Pathway_data[which(Pathway_data[,3]==""),c(2,1)]
+      Pathway_comp <- Pathway_comp[!duplicated(Pathway_comp),]
+      Pathway_comp <- cbind(Run_ReqdPaths[i,c(1:3)],rownames(Pathway_comp),Pathway_comp)
+      colnames(Pathway_comp)[c(4,5,6)] <- c("Parent_Index","Parent","Parent_Type")
+      write.table(Pathway_comp[which(Pathway_comp[,"Parent_Type"]=="protein"),"Parent"],paste(path,"_protein",sep=""),row.names = F,col.names = F,quote = F)
+      RUN_COMPONENTS <- rbind(RUN_COMPONENTS,Pathway_comp)
+      
+      
+      
+      Pathway_interactions <- Pathway_data[which(Pathway_data[,3]!=""),c(1,3,2)]
+      Pathway_interactions <- cbind(Run_ReqdPaths[i,c(1:3)],Pathway_interactions)
+      colnames(Pathway_interactions)[c(4:6)] <- c("Parent","Interaction","Target")
+      COMP <- Pathway_comp[,c("Parent","Parent_Type","Parent_Index")]
+      Pathway_interactions <- plyr:::join(COMP,Pathway_interactions,by="Parent",type="right",match="all")
+      colnames(COMP) <- c("Target","Target_Type","Target_Index")
+      Pathway_interactions <- plyr:::join(COMP,Pathway_interactions,by="Target",type="right",match="all")
+      Pathway_interactions <- Pathway_interactions[,c("PID","FileName","Pathway_Name","Parent","Parent_Type","Parent_Index","Interaction","Target","Target_Type","Target_Index")]
+      RUN_INTERACTIONS <- rbind(RUN_INTERACTIONS,Pathway_interactions)
+      
+      AVAIL_PATHS <- rbind(AVAIL_PATHS,Run_ReqdPaths[i,])
+    }
+  }
+  write.table(RUN_INTERACTIONS,paste(anaInput,"/INTERACTIONS.txt",sep=""),sep="\t",row.names = F,col.names = T)
+  write.table(RUN_COMPONENTS,paste(anaInput,"/COMPONENTS.txt",sep=""),sep="\t",row.names = F,col.names = T)
+  write.table(AVAIL_PATHS,paste(anaInput,"/AVAILABLE_PATHWAYS.txt",sep=""),sep="\t",row.names = F,col.names = T)
+  return(RUN_PIDS)
+}
+
+
+
 
 
 ####################################################################################################
@@ -291,24 +351,12 @@ InFlo <- function(X,Y){
   InFlo_core_file
   PATHWAY_DIR <- X
   RESULT_DIR <- Y
-  for(i in c(36871,36872,36874,36875,36876,36877,36878,36879,36880,36881,36882,36884,36885,36886,
-             36887,36888,36889,36890,36891,36892,36893,36894,36895,36896,36897,36898,36899,36901,
-             36902,36903,36905,36906,36907,36908,36909,36910,36911,36912,36913,36914,36915,36916,
-             36918,36919,36920,36921,36922,36923,36924,36927,36928,36929,36930,36931,36932,36934,
-             36935,36936,36937,36938,36939,36940,36941,36942,36943,36944,36945,36946,36947,36948,
-             36949,36950,36951,36952,36953,36954,36955,36956,36957,36958,36959,36961,36962,36963,
-             36964,36965,36966,36967,36968,36969,36970,36971,36972,36973,36974,36975,36976,36977,
-             36978,36979,36980,36981,36982,36983,36984,36985,36986,36987,36988,36989,36990,36991,
-             36992,36993,36994,36995,36996,36997,36998,37000,37001,37002,37003,37004,37005,37006,
-             37007,37008,37009,37010,37011,37012,37013,37014,37015,37016,37017,37018,37019,37020,
-             37021,37022,37023,37024,37025,37026,37027,37028,37029,37030,37031,37032,37033,37034,
-             37035,37036,37037,37038,37040,37041,37042,37043,37044,37045,37046,37047,37048,37049,
-             37050,37051,37052,37053,37054,37055,37056)){
+  for(i in RUN_PIDS){
     print(paste("Executive Pathway ",i))
     
     sys_cmd <- paste(InFlo_core_file," -p ",PATHWAY_DIR,"pid_",i,"_pathway.tab"," -c ",InFlo_Home,"/InFlo/em_simple.cfg -b ",PATHWAY_DIR,"pid_",i,"_pathway -r 1 > ",RESULT_DIR,"/samples_",i,"-inconsistentOK-blackballing.txt",sep="")
-    
-    system(sys_cmd)
+    print(sys_cmd)
+    #system(sys_cmd)
   }
 }
 
@@ -324,10 +372,10 @@ Post_Info <- function(X){
   Inflo_Res_Files <- cbind(Inflo_Res_ids,Inflo_Res_Files)
   colnames(Inflo_Res_Files) <- c("id","File_name")
   rownames(Inflo_Res_Files) <- NULL
-  Int_names <- Interaction_names
-  Inflo_Res_Files <- plyr:::join(as.data.frame(Inflo_Res_Files),Int_names,by="id",type="inner",match="all")
-  l <- sapply(Inflo_Res_Files, is.factor)
-  Inflo_Res_Files[l] <- lapply(Inflo_Res_Files[l], as.character)
+  #Int_names <- Interaction_names
+  #Inflo_Res_Files <- plyr:::join(as.data.frame(Inflo_Res_Files),Int_names,by="id",type="inner",match="all")
+  # l <- sapply(Inflo_Res_Files, is.factor)
+  # Inflo_Res_Files[l] <- lapply(Inflo_Res_Files[l], as.character)
   res <- NULL
   for(i in 1:length(Inflo_Res_Files[,1])){
     print(i)
@@ -355,8 +403,8 @@ Post_Info <- function(X){
       rownames(av) <- av[,'Patient']
       av[,'Patient'] <- NULL
       binned_file <- as.data.frame(t(av))
-      binned_file <- cbind(Inflo_Res_Files[i,c(1,3,4)],rownames(binned_file),binned_file)
-      colnames(binned_file)[4] <- "Interaction"
+      binned_file <- cbind(Inflo_Res_Files[i,1],rownames(binned_file),binned_file)
+      colnames(binned_file)[c(1,2)] <- c("PID","Interaction")
       res <- rbind.data.frame(res,binned_file)
     }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
   }
@@ -381,9 +429,47 @@ Post_Info <- function(X){
   R1$Parents <- gsub("\\)","",R1$Parents)
   
   INFLO_DATA <- cbind(R1,INFLO_DATA)
+  PATH_INFO <- read.delim(paste(anaInput,"/AVAILABLE_PATHWAYS.txt",sep=""),sep="\t",header = T,check.names = F,stringsAsFactors = F)
+  PATH_INFO <- PATH_INFO[,c("PID","Pathway_Name")]
+  INFLO_DATA <- plyr:::join(PATH_INFO,INFLO_DATA,by="PID",type="right",match="all")
+  INFLO_DATA <- INFLO_DATA[,c("PID","Pathway_Name","Interaction","Target","Parents",colnames(INFLO_DATA)[c(6:length(INFLO_DATA[1,]))])]
+  write.table(INFLO_DATA,paste(ResPath,"/InFLo_Results.txt",sep=""),sep="\t",row.names = F,col.names = T)
+  INFLO_DATA_PLOT <- INFLO_DATA %>% mutate(Parents = strsplit(as.character(Parents), ",")) %>% unnest(Parents)
+  INFLO_DATA_PLOT <- INFLO_DATA_PLOT[,c("PID","Pathway_Name","Interaction","Target","Parents",colnames(INFLO_DATA_PLOT)[c(5:(length(INFLO_DATA_PLOT[1,])-1))])]
+  INFLO_DATA_PLOT_PARENTS <- data.frame(do.call('rbind', strsplit(as.character(INFLO_DATA_PLOT$Parents),'*',fixed=TRUE)))
+  colnames(INFLO_DATA_PLOT_PARENTS) <- c("Parent","Parent_STATUS")
+  INFLO_DATA_PLOT <- cbind(INFLO_DATA_PLOT_PARENTS,INFLO_DATA_PLOT)
+  INFLO_DATA_PLOT <- INFLO_DATA_PLOT[,c("PID","Pathway_Name","Interaction","Target","Parent","Parent_STATUS",colnames(INFLO_DATA_PLOT)[c(8:(length(INFLO_DATA_PLOT[1,])))])]
+  #RUN_COMPONENTS <- read.delim()
+  RUN_INTERACTIONS <- read.delim(paste(anaInput,"/INTERACTIONS.txt",sep=""),sep="\t",header = T,check.names = F,stringsAsFactors = F)
+  for(i in 1:length(RUN_PIDS)){
+    Inflo_Path_Res <- INFLO_DATA_PLOT[which(INFLO_DATA_PLOT[,"PID"]==RUN_PIDS[i]),]
+    Inflo_Path_Res <- Inflo_Path_Res[!duplicated(Inflo_Path_Res),]
+    Inflo_Path_Res <- cbind(paste(Inflo_Path_Res[,'Parent'],Inflo_Path_Res[,'Target'],sep="*"),Inflo_Path_Res)
+    colnames(Inflo_Path_Res)[1] <- "ID"
+    
+    Inflo_Path_Inter <- RUN_INTERACTIONS[which(RUN_INTERACTIONS[,"PID"]==RUN_PIDS[i]),]
+    Inflo_Path_Inter <- Inflo_Path_Inter[!duplicated(Inflo_Path_Inter),c("Parent","Parent_Index","Parent_Type","Target","Target_Index","Target_Type","Interaction")]
+    Inflo_Path_Inter <- cbind(paste(Inflo_Path_Inter[,'Parent'],Inflo_Path_Inter[,'Target'],sep="*"),Inflo_Path_Inter)
+    colnames(Inflo_Path_Inter)[1] <- "ID"
+    
+    
+    Inflo_Path_Res2 <- plyr:::join(Inflo_Path_Inter,Inflo_Path_Res,by="ID",type="right",match="all")
+    Inflo_Path_Res2 <- Inflo_Path_Res2[complete.cases(Inflo_Path_Res2),]
+    PATH_NET <- Inflo_Path_Res2[,c("Parent","Parent_Index","Parent_Type","Target","Target_Index","Target_Type","Interaction")]
+    write.table(PATH_NET,paste(ResPathPath,"/",RUN_PIDS[i],"_NETWORK.txt",sep=""),sep="\t",row.names=F,col.names = T,quote = F)
+    
+    PATH_COMP_PARENTS <- Inflo_Path_Res2[,c("Parent","Parent_Type","Parent_Index",colnames(Inflo_Path_Res2)[c(15:(length(Inflo_Path_Res2[1,])))])]
+    colnames(PATH_COMP_PARENTS)[c(1:3)] <- c("Component","Component_Type","Component_Index")
+    PATH_COMP_TARGETS <- Inflo_Path_Res2[,c("Target","Target_Type","Target_Index",colnames(Inflo_Path_Res2)[c(15:(length(Inflo_Path_Res2[1,])))])]
+    colnames(PATH_COMP_TARGETS)[c(1:3)] <- c("Component","Component_Type","Component_Index")
+    
+    PATH_COMP <- rbind(PATH_COMP_TARGETS,PATH_COMP_PARENTS)
+    PATH_COMP <- PATH_COMP[!duplicated(PATH_COMP),]
+    PATH_COMP2 <- aggregate(.~Component+Component_Type+Component_Index,data = PATH_COMP,FUN=mean, na.rm=TRUE)
+    write.table(PATH_COMP2,paste(ResPathPath,"/",RUN_PIDS[i],"_COMPONENTS.txt",sep=""),sep="\t",row.names=F,col.names = T,quote = F)
+    }
   
-  INFLO_DATA <- INFLO_DATA[,c("name","id","source","Interaction","Target","Parents",colnames(INFLO_DATA)[c(7:length(INFLO_DATA[1,]))])]
-  write.table(INFLO_DATA,paste(anaPath,"/InFLo_Results.txt",sep=""),sep="\t",row.names = F,col.names = T)
   return(INFLO_DATA)
 }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
 }

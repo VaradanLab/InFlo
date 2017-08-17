@@ -1,1 +1,0 @@
-Patient#	Sample#	ATM:(ATM, protein),	PLK3:(ATM, active),(DNA damage, active),(PLK3, protein),	CDC25C:(CDC25C, protein),(PLK3, active),(prophase, active),	CHEK2:(CHEK2, protein),(PLK3, active),	TP53:(PLK3, active),(TP53, protein),	CCNE1:(CCNE1, protein),	

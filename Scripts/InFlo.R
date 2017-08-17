@@ -15,7 +15,7 @@ Run <- run_chk()
 if(Run){
 Initial_chk <- File_chk()
 Dir_create(Initial_chk)
-
+RUN_PIDS <- PATH_PROCESS(PATHWAY_INFORMATION,PATHWAYS_DIR)
 ##############################################~~~~Data_Import~############################################## 
 GE_Data <- Data_Read(GE_FILE)
 CNV_Data <- Data_Read(CNV_FILE)
@@ -34,9 +34,9 @@ if(RNASeqV2){
 #   GE_WILCOX <- Guass_Fit(GE_Data)
 #   CNV_WILCOX <- Guass_Fit(CNV_Data)
 # }
-PATHWAYS <- paste(anaTemp,"/pathways/",sep="")
+PATHWAYS <- paste(anaPath,"/pathways/",sep="")
 PRE_INFLO(GE_WILCOX,CNV_WILCOX,PATHWAYS)
-InFlo(PATHWAYS,ResPath)
+InFlo(PATHWAYS,anaTemp)
 Post_Info(ResPath)
 }
 })[3]

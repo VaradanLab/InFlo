@@ -1,1 +1,0 @@
-Patient#	Sample#	PLK2:(PLK2, protein),	PLK4:(PLK4, protein),	regulation of centriole replication:(PLK2, active),(PLK4, active),	
