@@ -20,8 +20,10 @@ ________________________________________________________________
 ________________________________________________________________
 <p>InFlo is a novel systems biology approach for characterizing a complex cellular processes using a unique multidimensional framework integrating transcriptomic, genomic and/or epigenomic profiles for any given biological sample. InFlo robustly characterizes tissue-specific differences in activities of signaling networks on a genome scale using unique probabilistic models of molecular interactions on a per-sample basis. InFlo is proved to be a robust framework for both discovery of evidence-based biomarkers and therapeutic targets, as well as for facilitating selection of tailored therapies in individual patients.</p>
 ________________________________________________________________
+
 ### System Requirements
 ________________________________________________________________
+
 ### Platforms and System Requirements
 
 Hard Disk Space : The module needs around 300 MB of Hard Disk space.
