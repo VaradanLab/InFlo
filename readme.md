@@ -1,4 +1,4 @@
-##InFlo Version 1.0
+### InFlo Version 1.0
 
 ##### For Academic/Non-Profit use
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>
@@ -7,7 +7,7 @@
 Send us email at varadanlab@gmail.com
 
 ________________________________________________________________
-###Reference
+### Reference
 
 ***Manuscript in press, NPG Oncogene***
 
@@ -16,11 +16,11 @@ ________________________________________________________________
 
 
 ________________________________________________________________
-###Introduction
+### Introduction
 ________________________________________________________________
 <p>InFlo is a novel systems biology approach for characterizing a complex cellular processes using a unique multidimensional framework integrating transcriptomic, genomic and/or epigenomic profiles for any given biological sample. InFlo robustly characterizes tissue-specific differences in activities of signaling networks on a genome scale using unique probabilistic models of molecular interactions on a per-sample basis. InFlo is proved to be a robust framework for both discovery of evidence-based biomarkers and therapeutic targets, as well as for facilitating selection of tailored therapies in individual patients.</p>
 ==============================================================================================================================
-###System Requirements
+### System Requirements
 ==============================================================================================================================
 ###Platforms and System Requirements
 
@@ -32,11 +32,11 @@ The module performance was tested on the following platform
 
   * 32-core  2.10 GHz Intel(R) Xeon(R) CPU E5-2450 with 64 GB linux machine
 
-###Software Architecture
+### Software Architecture
 
 The script was developed on the R platform with version 3.1, and it is assumed that the user also uses the same for running the script. 
 
-###Software Requirements
+### Software Requirements
 
  * [**R**](http://www.r-project.org/) : Free software environment for statistical computing and graphics. It compiles and runs on a wide variety of UNIX platforms.
 <br> preferred Version : >= 3.1 
@@ -51,12 +51,12 @@ The script was developed on the R platform with version 3.1, and it is assumed t
 <br> preferred Version : 0.2.5 (Provided with the package)
 
 ==============================================================================================================================
-##Downloading InFlo
+## Downloading InFlo
 InFlo can be downloaded from github by recursively cloning the git repository
    
    $ git clone https://github.com/VaradanLab/InFlo.git
 
-##Running InFlo
+## Running InFlo
 ##### Input Files : All the files should be Independent matrices(Genes as rows and samples as columns)
  * Gene Expression File
  * Somatic Copy Number File
@@ -103,4 +103,4 @@ The R script does the following jobs
 <p>The user can do required downstream analysis based on its requirement.</p>
 ================================================================================================================================
 
-###For any queries kindly mail us at varadanlab@gmail.com
+### For any queries kindly mail us at varadanlab@gmail.com
