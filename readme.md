@@ -54,12 +54,27 @@ ________________________________________________________________
 InFlo can be downloaded from github by recursively cloning the git repository
    
    $ git clone https://github.com/VaradanLab/InFlo.git
+________________________________________________________________
+## Preparing Data for the run
 
-## Running InFlo
 ##### Input Files : All the files should be Independent matrices(Genes as rows and samples as columns)
  * Gene Expression File
  * Somatic Copy Number File
  * Methylation Data File
+#### Users must note that for running the InFlo All the three Input files should have same rows and columns in the same order. 
+________________________________________________________________
+
+#### Pathway Files : InFlo requires the the pathways information to be provided in a tab delimited file. This file consists of the Nodes Information followed by the Interactions. Kindly check the example Pathways provided the the <Home>/pathways.zip File. 
+
+________________________________________________________________
+
+
+
+
+
+
+## Running InFlo
+
 
 You will need to run the "InFlo.R" script included in the InFlo package.
 
