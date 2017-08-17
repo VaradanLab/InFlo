@@ -14,12 +14,9 @@ ________________________________________________________________
 #### InFlo: A Novel Systems Biology Framework Identifies cAMP-CREB1 Axis as a Key Modulator of Platinum Resistance in Ovarian Cancer
 ***Nevenka Dimitrova, Anil Belur Nagaraj, Abolfazl Razi, Salendra Singh, Sitharthan Kamalakaran, Nilanjana Banerjee, Peronne Joseph, Alexander Mankovich, Prateek Mittal, Analisa DiFeo, Vinay Varadan***
 
-
-________________________________________________________________
 ### Introduction
 ________________________________________________________________
 <p>InFlo is a novel systems biology approach for characterizing a complex cellular processes using a unique multidimensional framework integrating transcriptomic, genomic and/or epigenomic profiles for any given biological sample. InFlo robustly characterizes tissue-specific differences in activities of signaling networks on a genome scale using unique probabilistic models of molecular interactions on a per-sample basis. InFlo is proved to be a robust framework for both discovery of evidence-based biomarkers and therapeutic targets, as well as for facilitating selection of tailored therapies in individual patients.</p>
-________________________________________________________________
 
 ### System Requirements
 ________________________________________________________________
