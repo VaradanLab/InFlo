@@ -61,17 +61,21 @@ ________________________________________________________________
  * Gene Expression File
  * Somatic Copy Number File
  * Methylation Data File
-#### Users must note that for running the InFlo All the three Input files should have same rows and columns in the same order. 
+#### Users must note that for running the InFlo All the three Input files should have same rows and columns in the same order.
+
+ * SAMPLE_INFORMATION : This File consisting of information if sample is "Tumor" or "Normal"
 ________________________________________________________________
 
-#### Pathway Files : InFlo requires the the pathways information to be provided in a tab delimited file. This file consists of the Nodes Information followed by the Interactions. Kindly check the example Pathways provided the the <Home>/pathways.zip File. 
+#### Pathway Files
+ InFlo requires the the pathways information to be provided in a tab delimited file. This file consists of the Nodes Information followed  by the Interactions. Kindly check the example Pathways provided the <Home>/pathways.zip File. 
 
+* User will also need to provide a list of Pathways they want to analyse. This file consists of the following columns to be Provided by User. 
+  * PID [Numeric]	: Its a unique ID for the pathway
+  * FileName [Character] : Filename for the Pathway	
+  * Pathway_Name :  Name of the Pathway
+  
+ Kindly check the example Pathway Information File provided the <Home>/examples_files/TEST_Pathway_Info_Short.txt File.
 ________________________________________________________________
-
-
-
-
-
 
 ## Running InFlo
 
