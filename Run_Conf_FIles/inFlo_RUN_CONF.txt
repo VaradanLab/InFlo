@@ -21,4 +21,5 @@ CNV_FILE = "/Projects/InFlo/InFlo_V2/example_files/Test_CNV.txt"
 ##### File consisting of information if sample is "Tumor" or "Normal"
 SAMPLE_INFORMATION <- "/Projects/InFlo/InFlo_V2/example_files/Test_INFO.txt"
 
-PATHWAY_INFORMATION <- ""
+PATHWAY_INFORMATION <- "PATH_TO_PATHWAY_INFORMATION_FILE"
+PATHWAY_DIRECTORY <- "PATH_TO_PATHWAYS_DIRECTORY"
