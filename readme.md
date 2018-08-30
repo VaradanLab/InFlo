@@ -8,8 +8,7 @@ Send us email at varadanlab@gmail.com
 
 ________________________________________________________________
 ### Reference
-#### InFlo: A Novel Systems Biology Framework Identifies cAMP-CREB1 Axis as a Key Modulator of Platinum Resistance in Ovarian Cancer
-***Nevenka Dimitrova, Anil Belur Nagaraj, Abolfazl Razi, Salendra Singh, Sitharthan Kamalakaran, Nilanjana Banerjee, Peronne Joseph, Alexander Mankovich, Prateek Mittal, Analisa DiFeo, Vinay Varadan***
+#### Dimitrova, N., Nagaraj, A.B., Razi, A., Singh, S., Kamalakaran, S., Banerjee, N., Joseph, P., Mankovich, A., Mittal, P., DiFeo, A. and Varadan, V., 2017. InFlo: a novel systems biology framework identifies cAMP-CREB1 axis as a key modulator of platinum resistance in ovarian cancer. Oncogene, 36(17), p.2472.***
 
 ### Introduction
 ________________________________________________________________
