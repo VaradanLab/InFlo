@@ -24,11 +24,23 @@ tumor_samples <- Samp_Info[which(Samp_Info[,'Sample_Type']=="Tumor"),"Sample_Nam
 normal_samples <- Samp_Info[which(Samp_Info[,'Sample_Type']=="Normal"),"Sample_Name"]
 ############################################################################################ 
 if(RNASeqV2){
-  GE_WILCOX <<- DeSEQ_TEST(GE_Data)
-  CNV_WILCOX <<- Wilcox_Test(CNV_Data)
+GE_WILCOX <<- DeSEQ_TEST(GE_Data)
+if(is.null(CNV_Data)){
+  CNV_WILCOX <<- matrix(1,nrow = length(rownames(GE_WILCOX)),ncol = length(colnames(GE_WILCOX)))
+  rownames(CNV_WILCOX) <- rownames(GE_WILCOX)
+  colnames(CNV_WILCOX) <- colnames(GE_WILCOX)
 }else{
-  GE_WILCOX <<- Wilcox_Test(GE_Data)
   CNV_WILCOX <<- Wilcox_Test(CNV_Data)
+}
+}else{
+GE_WILCOX <<- Wilcox_Test(GE_Data)
+if(is.null(CNV_Data)){
+  CNV_WILCOX <<- matrix(1,nrow = length(rownames(GE_WILCOX)),ncol = length(colnames(GE_WILCOX)))
+  rownames(CNV_WILCOX) <- rownames(GE_WILCOX)
+  colnames(CNV_WILCOX) <- colnames(GE_WILCOX)
+}else{
+  CNV_WILCOX <<- Wilcox_Test(CNV_Data)
+}
 }
 # if(GUASS){
 #   GE_WILCOX <- Guass_Fit(GE_Data)
@@ -37,7 +49,7 @@ if(RNASeqV2){
 PATHWAYS <- paste(anaPath,"/pathways/",sep="")
 PRE_INFLO(GE_WILCOX,CNV_WILCOX,PATHWAYS)
 InFlo(PATHWAYS,anaTemp)
-Post_Info(ResPath)
+Post_InFlo(anaTemp)
 }
 })[3]
 getDoParWorkers()
