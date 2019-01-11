@@ -18,7 +18,11 @@ Dir_create(Initial_chk)
 RUN_PIDS <- PATH_PROCESS(PATHWAY_INFORMATION,PATHWAYS_DIR)
 ##############################################~~~~Data_Import~############################################## 
 GE_Data <- Data_Read(GE_FILE)
-CNV_Data <- Data_Read(CNV_FILE)
+
+CNV_Data <- try(Data_Read(CNV_FILE))
+if(class(CNV_Data)=="try-error"){
+CNV_Data <- NULL
+}
 Samp_Info <-  read.table(SAMPLE_INFORMATION,header=T,check.names = F,stringsAsFactors = F)
 tumor_samples <- Samp_Info[which(Samp_Info[,'Sample_Type']=="Tumor"),"Sample_Name"]
 normal_samples <- Samp_Info[which(Samp_Info[,'Sample_Type']=="Normal"),"Sample_Name"]

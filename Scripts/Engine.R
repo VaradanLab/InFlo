@@ -5,7 +5,7 @@
 ################################
 #####TESTING WILL REMOVE ASAP###
 
-Genes_Info <- read.delim(paste(InFlo_Home,"/Support_FIles/GENE_NAMES_CHECK.txt",sep=""),sep="\t",header = T, check.names = F, stringsAsFactors = F)
+Genes_Info <- read.delim("/Projects/InFlo/Support_FIles/GENE_NAMES_CHECK.txt",sep="\t",header = T, check.names = F, stringsAsFactors = F)
 Genes_Info <- Genes_Info[!duplicated(Genes_Info),]
 
 ####################################
@@ -164,6 +164,10 @@ for(pack in c("marray","stringr","plyr","multtest","permute","IRanges","GenomicR
 # Function to read the Data files. and check for If the file consists of duplicate sample names or gene names. 
 Data_Read <- function(X){
   Data2 <- read.table(X,sep="\t",header=T,check.names = F, stringsAsFactors = F)
+  # if(class(Data2)=="try-error"){
+  #   Data2 <- NULL
+  # }
+  #Data2 <- read.table(X,sep="\t",header=T,check.names = F, stringsAsFactors = F)
   # if(length(Data2[,'Gene_Name'])==length(unique(Data2[,'Gene_Name']))){
   #   rownames(Data2) <- Data2[,'Gene_Name']
   #   Data2[,"Gene_Name"] <- NULL
