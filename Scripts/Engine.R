@@ -519,7 +519,7 @@ Post_InFlo <- function(X){
     colnames(INFLO_DATA_PARENTS) <- c("Parent","Parent_STATUS")
     
     
-    INFLO_DATA_PARENTS[] <- lapply(INFLO_DATA_PARENTS,as.character)
+    #INFLO_DATA_PARENTS[] <- lapply(INFLO_DATA_PARENTS,as.character)
     
     
     INFLO_DATA_PARENTS$Parent_STATUS <- ifelse(INFLO_DATA_PARENTS[,"Parent"]==INFLO_DATA_PARENTS[,"Parent_STATUS"],NA,INFLO_DATA_PARENTS[,"Parent_STATUS"])
