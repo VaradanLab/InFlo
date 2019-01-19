@@ -3,17 +3,6 @@
 ######################!/usr/bin/env Rscript
 
 ################################
-#####TESTING WILL REMOVE ASAP###
-
-Genes_Info <- read.delim("/Projects/InFlo/Support_FIles/GENE_NAMES_CHECK.txt",sep="\t",header = T, check.names = F, stringsAsFactors = F)
-Genes_Info <- Genes_Info[!duplicated(Genes_Info),]
-
-####################################
-
-
-
-
-
 ######################################################################################################################################################################
 ##The Following fucntion checks for all the required files. 
 File_chk <- function()
@@ -27,6 +16,10 @@ File_chk <- function()
   #Run_Test <<- ifelse(length(Interaction_Files)>0,TRUE,FALSE)
   Run_Test <<- ifelse(file.exists(PATHWAY_INFORMATION),TRUE,FALSE)
   Run_Test <<- ifelse(dir.exists(PATHWAYS_DIR),TRUE,FALSE)
+  Genes_Info <<- read.delim(paste(InFlo_Home,"/Support_Files/GENE_NAMES_CHECK.txt",sep=""),sep="\t",header = T, check.names = F, stringsAsFactors = F)
+  Genes_Info <- Genes_Info[!duplicated(Genes_Info),]
+  
+  
   #Pathway_Comps <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_COMPONENT_NETWORK.txt",sep="")
   #PATHWAYS_COMPONENT_NETWORK <<- read.table(Pathway_Comps,sep="\t",header=T,check.names = F,stringsAsFactors = F)
   #Pathway_Interactions <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_INTERACTION_NETWORK.txt",sep="")
