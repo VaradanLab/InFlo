@@ -76,8 +76,9 @@ dwnPack <- function(x)
     install.packages(x,dep=TRUE)
     if(!require(x,character.only = TRUE))
     {
-      source("https://bioconductor.org/biocLite.R")
-      biocLite(x)
+      if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+        BiocManager::install(x)
       if(is.element(x, installed.packages()[,1])) stop("Package not found")
     }
   }
