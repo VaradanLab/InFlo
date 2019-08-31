@@ -73,12 +73,12 @@ dwnPack <- function(x)
 {
   if(!require(x,character.only = TRUE))
   {
-    install.packages(x,dep=TRUE)
+    install.packages(x,dependencies =TRUE)
     if(!require(x,character.only = TRUE))
     {
       if (!requireNamespace("BiocManager", quietly = TRUE))
         install.packages("BiocManager")
-        BiocManager::install(x)
+        BiocManager::install(x,dependencies = T)
       if(is.element(x, installed.packages()[,1])) stop("Package not found")
     }
   }
