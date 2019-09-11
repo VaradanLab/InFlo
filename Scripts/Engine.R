@@ -10,28 +10,14 @@ File_chk <- function()
   Run_Test <<- ifelse(dir.exists(InFlo_Home),TRUE,FALSE)
   InFlo_core_file <<- paste(InFlo_Home,"/InFlo/InFlo",sep="")
   Run_Test <<- ifelse(file.exists(InFlo_core_file),TRUE,FALSE)
-  #Interaction_Dir <<- paste(InFlo_Home,"/Support_Files/Interactions/",sep="")
-  #Interaction_Files <<- list.files(Interaction_Dir)
-  #Interaction_names <<- read.delim(paste(InFlo_Home,"/Support_Files/names.tab",sep=""),header = T,sep="\t")
-  #Run_Test <<- ifelse(length(Interaction_Files)>0,TRUE,FALSE)
   Run_Test <<- ifelse(file.exists(PATHWAY_INFORMATION),TRUE,FALSE)
   Run_Test <<- ifelse(dir.exists(PATHWAYS_DIR),TRUE,FALSE)
   Genes_Info <<- read.delim(paste(InFlo_Home,"/Support_Files/GENE_NAMES_CHECK.txt",sep=""),sep="\t",header = T, check.names = F, stringsAsFactors = F)
   Genes_Info <- Genes_Info[!duplicated(Genes_Info),]
-  
-  
-  #Pathway_Comps <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_COMPONENT_NETWORK.txt",sep="")
-  #PATHWAYS_COMPONENT_NETWORK <<- read.table(Pathway_Comps,sep="\t",header=T,check.names = F,stringsAsFactors = F)
-  #Pathway_Interactions <<- paste(InFlo_Home,"/Support_Files/PATHWAYS_INTERACTION_NETWORK.txt",sep="")
-  #PATHWAYS_INTERACTION_NETWORK <<- read.table(Pathway_Interactions,header=T,check.names = F,stringsAsFactors = F)
-  #Pathways <<- paste(InFlo_Home,"/pathways.zip",sep="")
-  #Run_Test <<- ifelse(file.exists(Pathway_Comps),TRUE,FALSE)
-  #Run_Test <<- ifelse(file.exists(Pathway_Interactions),TRUE,FALSE)
   ana <<- paste(InFlo_Home,"Analysis",sep='/')
   Run_Test <<- ifelse(dir.exists(ana),TRUE,FALSE)
   Run_Test <<- ifelse(file.exists(CNV_FILE),TRUE,FALSE)
   Run_Test <<- ifelse(file.exists(GE_FILE),TRUE,FALSE)
-  #Run_Test <<- ifelse(file.exists(METH_FILE),TRUE,FALSE)
   return(Run_Test)
 }
 
@@ -89,9 +75,6 @@ run_chk <- function()
 {
   args <- commandArgs(trailingOnly = TRUE)
   print(args)
-  
-  #args <- c("-R","/Projects/InFlo/scripts/InFlo_CONF.txt")
-  
   len_args <- length(args)
   if(len_args == 0)
   {
@@ -129,46 +112,16 @@ run_chk <- function()
 }
 ####################################################################################################
 ###################################################################################################
-for(pack in c("marray","stringr","plyr","multtest","permute","IRanges","GenomicRanges","TCGAbiolinks","tidyr","dplyr","survival","DESeq2","stats","modeest","mixtools","doParallel"))
+for(pack in c("marray","stringr","plyr","multtest","permute","IRanges","GenomicRanges","tidyr","dplyr","survival","DESeq2","stats","modeest","mixtools","doParallel"))
 {
   tryCatch({
     dwnPack(pack)}, error=function(e){cat("Error :",conditionMessage(e)," ")})
 }
 
-
-
-
-# dwnPack("marray")
-# dwnPack("stringr")
-# dwnPack("plyr")
-# dwnPack("multtest")
-# dwnPack("permute")
-# dwnPack("IRanges")
-# dwnPack("GenomicRanges")
-# dwnPack("TCGAbiolinks")
-# dwnPack("tidyr")
-# dwnPack("dplyr")
-# dwnPack("survival")
-# dwnPack("DESeq2")
-# dwnPack("stats")
-# dwnPack("modeest")
-# dwnPack("mixtools")
-# dwnPack("doParallel")
 ###################################################################################################
 # Function to read the Data files. and check for If the file consists of duplicate sample names or gene names. 
 Data_Read <- function(X){
   Data2 <- read.table(X,sep="\t",header=T,check.names = F, stringsAsFactors = F)
-  # if(class(Data2)=="try-error"){
-  #   Data2 <- NULL
-  # }
-  #Data2 <- read.table(X,sep="\t",header=T,check.names = F, stringsAsFactors = F)
-  # if(length(Data2[,'Gene_Name'])==length(unique(Data2[,'Gene_Name']))){
-  #   rownames(Data2) <- Data2[,'Gene_Name']
-  #   Data2[,"Gene_Name"] <- NULL
-  #   return(Data2)
-  # }else{
-  #   print("Duplicate_Gene_Names")
-  # }
 }
 
 ####################################################################################################
@@ -303,8 +256,6 @@ PRE_INFLO <- function(X,Y,Z){
   
   Reqd_Samples <- as.data.frame(colnames(exp))
   colnames(Reqd_Samples) <- "Sample"
-  
-  
   Fac <- Y
   Fac <- cbind(Gene=rownames(Fac),Fac)
   Fac <- plyr:::join(Reqd_Genes,as.data.frame(Fac),by="Gene",type="left",match="all")
@@ -335,8 +286,6 @@ PRE_INFLO <- function(X,Y,Z){
   Fac.matrix <- as.data.frame(Fac.matrix2)
   Fac.matrix2 <- NULL
   # Read in pathway genes
-  # the arguement should be a readable file (pid_1_pathway.tab)
-  
   pathway_dir <- Z
   pathway_files <- list.files(pathway_dir, pattern = "_pathway.tab$")
   
@@ -344,18 +293,12 @@ PRE_INFLO <- function(X,Y,Z){
     print(i)
     pathway_name<-pathway_files[i]
     pathway_gene_file <- paste(pathway_name,"_protein",sep="")
-    
-    # Uncomment if protein files don't already exist
-    #command<- paste("./process_pathway.sh",pathway_name,">",pathway_gene_file)
-    #system(command)
-    
     pathway_genes_nonunique <- read.delim(paste(pathway_dir,pathway_gene_file,sep=""),sep="\t",header = F,check.names = F,stringsAsFactors = F)
     colnames(pathway_genes_nonunique) <- "GENE"
     pathway_genes_nonunique$NEW_GENE <- sapply(pathway_genes_nonunique[,"GENE"],function(x) unlist(strsplit(as.character(x),split = c("-","_")))[1])
     colnames(pathway_genes_nonunique) <- c("Orig_Gene","GENE")
     pathway_genes_nonunique <- plyr:::join(pathway_genes_nonunique,Genes_Info,by="GENE",type="left",match="all")
     
-    #pathway_genes<-matrix(unique(pathway_genes_nonunique[,1]),length(unique(pathway_genes_nonunique[,1])))
     ##############################################################################################
     exp.matrix.pathway <- exp.matrix[intersect(pathway_genes_nonunique[,"HGNC_SYMBOL"],rownames(exp.matrix)),]
     exp.matrix.pathway <- cbind(HGNC_SYMBOL=rownames(exp.matrix.pathway),exp.matrix.pathway)
@@ -389,12 +332,6 @@ PRE_INFLO <- function(X,Y,Z){
     Fac.matrix.pathway <- cbind(id=rownames(Fac.matrix.pathway),Fac.matrix.pathway)
     Fac.matrix.pathway[Fac.matrix.pathway =="NaN"] <- NA
     #############################################################################################
-    # # set row and column names for the pathway data
-    # colnames(exp.matrix.pathway) <- colnames(exp.matrix)
-    # rownames(exp.matrix.pathway) <- pathway_genes
-    # 
-    # colnames(Fac.matrix.pathway) <- colnames(Fac.matrix)
-    # rownames(Fac.matrix.pathway) <- pathway_genes
     #############################################################################################
     
     # file names
@@ -437,10 +374,6 @@ Post_InFlo <- function(X){
     Inflo_Res_Files <- cbind(Inflo_Res_ids,Inflo_Res_Files)
     colnames(Inflo_Res_Files) <- c("id","File_name")
     rownames(Inflo_Res_Files) <- NULL
-    #Int_names <- Interaction_names
-    #Inflo_Res_Files <- plyr:::join(as.data.frame(Inflo_Res_Files),Int_names,by="id",type="inner",match="all")
-    # l <- sapply(Inflo_Res_Files, is.factor)
-    # Inflo_Res_Files[l] <- lapply(Inflo_Res_Files[l], as.character)
     res <- NULL
     for(i in 1:length(Inflo_Res_Files[,1])){
       print(i)
@@ -453,18 +386,11 @@ Post_InFlo <- function(X){
         Without_Norm_av[,'Patient'] <- NULL
         Without_Norm_av[,'Sample.'] <- NULL
         colnames(Without_Norm_av)[1] <- "Patient" 
-        # Without_Norm_av_colnames <- colnames(Without_Norm_av)
-        # #Without_Norm_av_colnames <- gsub("X","",Without_Norm_av_colnames)
-        # Without_Norm_av_colnames_2 <- Without_Norm_av_colnames
-        # Without_Norm_av_colnames_2[c(2:length(Without_Norm_av_colnames_2))] <- floor(as.numeric(Without_Norm_av_colnames_2[c(2:length(Without_Norm_av_colnames_2))]))
-        # colnames(Without_Norm_av) <- Without_Norm_av_colnames_2
-        # Without_Norm_av[,'Patient'] <- as.character(Without_Norm_av[,'Patient'])
         for(j in 2:length(Without_Norm_av[1,])){
           Without_Norm_av[,j] <- as.numeric(as.character(Without_Norm_av[,j]))
         }
         av <- Without_Norm_av
         av[,"Sample#"] <- NULL
-        #write.table(av,file = paste(Inflo_means_Dir,paste(Inflo_Res_Files[i,2],"mean",sep="_"),sep="/"),sep="\t",col.names = T, row.names = F, eol = "\n")
         rownames(av) <- av[,'Patient']
         av[,'Patient'] <- NULL
         binned_file <- as.data.frame(t(av))
@@ -480,10 +406,7 @@ Post_InFlo <- function(X){
     rownames(INFLO_DATA) <- NULL
     INFLO_DATA <- INFLO_DATA[complete.cases(INFLO_DATA),]
     INFLO_DATA[,'Interaction'] <- as.character(INFLO_DATA[,'Interaction'])
-    # INFLO_DATA$ID2 <- paste(INFLO_DATA[,'name'],INFLO_DATA[,'Interaction'],sep="*")
-    # INFLO_DATA$ID2 <- gsub(" ","_",INFLO_DATA$ID2)
-    # rownames(INFLO_DATA) <- INFLO_DATA[,'ID2']
-    # INFLO_DATA[,'ID'] <- NULL
+    #------------------
     R1 <- NULL
     R1 <- data.frame(do.call('rbind', strsplit(as.character(INFLO_DATA$Interaction),':',fixed=TRUE)))[c(1:2)]
     colnames(R1) <- c("Target","Parents")
@@ -492,132 +415,42 @@ Post_InFlo <- function(X){
     R1$Parents <- gsub(",_","*",R1$Parents)
     R1$Parents <- gsub("\\(","",R1$Parents)
     R1$Parents <- gsub("\\)","",R1$Parents)
-    
+    #------------------
     INFLO_DATA <- cbind(R1,INFLO_DATA)
     PATH_INFO <- read.delim(paste(anaInput,"/AVAILABLE_PATHWAYS.txt",sep=""),sep="\t",header = T,check.names = F,stringsAsFactors = F)
     PATH_INFO <- PATH_INFO[,c("PID","Pathway_Name")]
     INFLO_DATA <- plyr:::join(PATH_INFO,INFLO_DATA,by="PID",type="right",match="all")
     INFLO_DATA <- INFLO_DATA[,c("PID","Pathway_Name","Interaction","Target","Parents",colnames(INFLO_DATA)[c(6:length(INFLO_DATA[1,]))])]
     write.table(INFLO_DATA,paste(ResPath,"/InFLo_Results.txt",sep=""),sep="\t",row.names = F,col.names = T)
-    #################################################################################################
-    #INFLO_DATA <- read.delim("/Projects/BRC_Brain_Mets/BRC_BRAIN_CNS_METS_INFLO_RESULTS/Results/InFLo_Results.txt",sep="\t",header = T,check.names = F, stringsAsFactors = F)
+    #------------------
     INFLO_DATA$Interaction <- sapply(INFLO_DATA$Interaction,function(x) gsub(" : ",":",as.character(x)))
     INFLO_DATA$Interaction <- sapply(INFLO_DATA$Interaction,function(x) gsub(": ",":",as.character(x)))
     INFLO_DATA$Interaction <- sapply(INFLO_DATA$Interaction,function(x) gsub(" :",":",as.character(x)))
     INFLO_DATA$Interaction <- sapply(INFLO_DATA$Interaction,function(x) gsub("::",":",as.character(x)))
-    
     INFLO_DATA <- INFLO_DATA %>% mutate(Parents = strsplit(as.character(Parents), ",")) %>% unnest(Parents)
     INFLO_DATA <- INFLO_DATA[,c("PID","Pathway_Name","Interaction","Target","Parents",colnames(INFLO_DATA)[c(5:(length(INFLO_DATA[1,])-1))])]
-    
     INFLO_DATA_PARENTS <- data.frame(do.call('rbind', str_split(as.character(INFLO_DATA$Parents),pattern = '\\*',n = 2)))
     colnames(INFLO_DATA_PARENTS) <- c("Parent","Parent_STATUS")
-    
-    
-    #INFLO_DATA_PARENTS[] <- lapply(INFLO_DATA_PARENTS,as.character)
-    
-    
     INFLO_DATA_PARENTS$Parent_STATUS <- ifelse(INFLO_DATA_PARENTS[,"Parent"]==INFLO_DATA_PARENTS[,"Parent_STATUS"],NA,INFLO_DATA_PARENTS[,"Parent_STATUS"])
     INFLO_DATA_PARENTS$Parent_STATUS <- sapply(INFLO_DATA_PARENTS$Parent_STATUS,function(x) gsub("\\*","",as.character(x)))
-    
-    
-    
-    
-    
+    #------------------
     INFLO_DATA <- cbind(INFLO_DATA_PARENTS,INFLO_DATA)
     INFLO_DATA <- INFLO_DATA[,c("PID","Pathway_Name","Interaction","Target","Parent","Parent_STATUS",colnames(INFLO_DATA)[c(8:(length(INFLO_DATA[1,])))])]
     INFLO_DATA <- INFLO_DATA[!duplicated(INFLO_DATA),]
-    
-    
     write.table(INFLO_DATA,paste(ResPath,"/InFLo_Interaction_Results.txt",sep=""),sep="\t",row.names = F,col.names = T)
-    
-    
-    #INFLO_DATA[,c("Parent_Type","Interaction","Pathway_Name")] <- NULL
-    #INFLO_DATA <- cbind(ID=paste(INFLO_DATA[,"PID"],INFLO_DATA[,"Parent"],INFLO_DATA[,"Target"],sep="*"),INFLO_DATA)
-    
-    
+    #------------------
     SIG_TAR <- INFLO_DATA[,c("Target",colnames(INFLO_DATA)[c(7:length(INFLO_DATA))])]
     SIG_TAR <- aggregate(.~Target, data=SIG_TAR, mean,na.action = na.omit)
     colnames(SIG_TAR)[1] <- "Node"
-    
+    #------------------
     SIG_PAR <- INFLO_DATA[,c("Parent",colnames(INFLO_DATA)[c(7:length(INFLO_DATA))])]
     SIG_PAR <- aggregate(.~Parent, data=SIG_PAR, mean,na.action = na.omit)
     colnames(SIG_PAR)[1] <-"Node"
-    
-    
+    #------------------
     INFLO_DATA <- as.data.frame(rbind(SIG_TAR,SIG_PAR))
     INFLO_DATA <- INFLO_DATA[!duplicated(INFLO_DATA[,"Node"]),]
     #INFLO_DATA <- INFLO_DATA[,c("Node",BE_SAMPS,EAC_SAMPS)]
     write.table(INFLO_DATA,paste(ResPath,"/InFLo_Nodes_Results.txt",sep=""),sep="\t",row.names = F,col.names = T)
-    #################################################################################################
-    # 
-    # INFLO_DATA_PLOT <- INFLO_DATA %>% mutate(Parents = strsplit(as.character(Parents), ",")) %>% unnest(Parents)
-    # INFLO_DATA_PLOT <- INFLO_DATA_PLOT[,c("PID","Pathway_Name","Interaction","Target","Parents",colnames(INFLO_DATA_PLOT)[c(5:(length(INFLO_DATA_PLOT[1,])-1))])]
-    # INFLO_DATA_PLOT_PARENTS <- data.frame(do.call('rbind', strsplit(as.character(INFLO_DATA_PLOT$Parents),'*',fixed=TRUE)))
-    # colnames(INFLO_DATA_PLOT_PARENTS) <- c("Parent","Parent_STATUS")
-    # INFLO_DATA_PLOT <- cbind(INFLO_DATA_PLOT_PARENTS,INFLO_DATA_PLOT)
-    # INFLO_DATA_PLOT <- INFLO_DATA_PLOT[,c("PID","Pathway_Name","Interaction","Target","Parent","Parent_STATUS",colnames(INFLO_DATA_PLOT)[c(8:(length(INFLO_DATA_PLOT[1,])))])]
-    # #RUN_COMPONENTS <- read.delim()
-    # RUN_INTERACTIONS <- read.delim(paste(anaInput,"/INTERACTIONS.txt",sep=""),sep="\t",header = T,check.names = F,stringsAsFactors = F)
-    # RUN_PIDS <- as.numeric(PATH_INFO[,1])
-    # for(i in 1:length(RUN_PIDS)){
-    #   print(i)
-    #   Inflo_Path_Res <- INFLO_DATA_PLOT[which(INFLO_DATA_PLOT[,"PID"]==RUN_PIDS[i]),]
-    #   Inflo_Path_Res <- Inflo_Path_Res[!duplicated(Inflo_Path_Res),]
-    #   Inflo_Path_Res <- cbind(paste(Inflo_Path_Res[,'Parent'],Inflo_Path_Res[,'Target'],sep="*"),Inflo_Path_Res)
-    #   colnames(Inflo_Path_Res)[1] <- "ID"
-    #   
-    #   Inflo_Path_Inter <- RUN_INTERACTIONS[which(RUN_INTERACTIONS[,"PID"]==RUN_PIDS[i]),]
-    #   Inflo_Path_Inter <- Inflo_Path_Inter[!duplicated(Inflo_Path_Inter),c("Parent","Parent_Index","Parent_Type","Target","Target_Index","Target_Type","Interaction")]
-    #   Inflo_Path_Inter <- cbind(paste(Inflo_Path_Inter[,'Parent'],Inflo_Path_Inter[,'Target'],sep="*"),Inflo_Path_Inter)
-    #   colnames(Inflo_Path_Inter)[1] <- "ID"
-    #   
-    #   
-    #   Inflo_Path_Res2 <- plyr:::join(Inflo_Path_Inter,Inflo_Path_Res,by="ID",type="right",match="all")
-    #   Inflo_Path_Res2 <- Inflo_Path_Res2[complete.cases(Inflo_Path_Res2),]
-    #   PATH_NET <- Inflo_Path_Res2[,c("Parent","Parent_Index","Parent_Type","Target","Target_Index","Target_Type","Interaction")]
-    #   write.table(PATH_NET,paste(ResPathPath,"/",RUN_PIDS[i],"_NETWORK.txt",sep=""),sep="\t",row.names=F,col.names = T,quote = F)
-    #   
-    #   PATH_COMP_PARENTS <- Inflo_Path_Res2[,c("Parent","Parent_Type","Parent_Index",colnames(Inflo_Path_Res2)[c(15:(length(Inflo_Path_Res2[1,])))])]
-    #   colnames(PATH_COMP_PARENTS)[c(1:3)] <- c("Component","Component_Type","Component_Index")
-    #   PATH_COMP_TARGETS <- Inflo_Path_Res2[,c("Target","Target_Type","Target_Index",colnames(Inflo_Path_Res2)[c(15:(length(Inflo_Path_Res2[1,])))])]
-    #   colnames(PATH_COMP_TARGETS)[c(1:3)] <- c("Component","Component_Type","Component_Index")
-    #   
-    #   PATH_COMP <- rbind(PATH_COMP_TARGETS,PATH_COMP_PARENTS)
-    #   PATH_COMP <- PATH_COMP[!duplicated(PATH_COMP),]
-    #   PATH_COMP2 <- aggregate(.~Component+Component_Type+Component_Index,data = PATH_COMP,FUN=mean, na.rm=TRUE)
-    #   write.table(PATH_COMP2,paste(ResPathPath,"/",RUN_PIDS[i],"_COMPONENTS.txt",sep=""),sep="\t",row.names=F,col.names = T,quote = F)
-    # }
-    # 
-    #return(INFLO_DATA)
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
 }
 ####################################################################################################
-
-
-#####################Guassian-fit Modelling#########################################################
-## We also tried fitting data over guassian models. but not using in the main pipepline. 
-# Guass_Fit <- function(X){
-#   Dat <- X
-#   tumor_samples <- intersect(tumor_samples,colnames(Dat))
-#   normal_samples <- intersect(normal_samples,colnames(Dat))
-#   if(length(normal_samples)>=3){
-#     tumor_matrix <- Dat[,tumor_samples]
-#     normal_matrix <- Dat[,normal_samples]
-#     #normal_matrix <- normal_matrix[rownames(tumor_matrix),]
-#     
-#     processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
-#     
-#     Dat <- cbind(tumor_matrix,normal_matrix)
-#     processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
-#     for(l in 1:length(tumor_samples)){
-#       print(l)
-#       
-#       fit_data <- cbind(tumor_matrix[,l],normal_matrix)
-#       tryCatch({processed_tumor_matrix[,l] <- apply(Dat,1,function(x){2^as.numeric(normalmixEM(na.omit(unlist(fit_data)),k=2,maxit=50,epsilon=0.01)$loglik)})}, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
-#     }
-#     colnames(processed_tumor_matrix) = colnames(tumor_matrix)
-#     rownames(processed_tumor_matrix) = rownames(tumor_matrix)
-#     
-#     return(processed_tumor_matrix)
-#     }
-# }

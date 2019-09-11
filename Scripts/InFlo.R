@@ -46,10 +46,6 @@ if(is.null(CNV_Data)){
   CNV_WILCOX <<- Wilcox_Test(CNV_Data)
 }
 }
-# if(GUASS){
-#   GE_WILCOX <- Guass_Fit(GE_Data)
-#   CNV_WILCOX <- Guass_Fit(CNV_Data)
-# }
 PATHWAYS <- paste(anaPath,"/pathways/",sep="")
 PRE_INFLO(GE_WILCOX,CNV_WILCOX,PATHWAYS)
 InFlo(PATHWAYS,anaTemp)
