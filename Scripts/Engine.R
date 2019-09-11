@@ -588,7 +588,7 @@ Post_InFlo <- function(X){
     #   write.table(PATH_COMP2,paste(ResPathPath,"/",RUN_PIDS[i],"_COMPONENTS.txt",sep=""),sep="\t",row.names=F,col.names = T,quote = F)
     # }
     # 
-    return(INFLO_DATA)
+    #return(INFLO_DATA)
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
 }
 ####################################################################################################
