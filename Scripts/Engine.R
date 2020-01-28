@@ -5,7 +5,7 @@
 ################################
 #####TESTING WILL REMOVE ASAP###
 
-Genes_Info <- read.delim("/Projects/InFlo/Support_FIles/GENE_NAMES_CHECK.txt",sep="\t",header = T, check.names = F, stringsAsFactors = F)
+Genes_Info <- read.delim(paste(INFLO_HOME,"Support_Files/GENE_NAMES_CHECK.txt",sep=""),sep="\t",header = T, check.names = F, stringsAsFactors = F)
 Genes_Info <- Genes_Info[!duplicated(Genes_Info),]
 
 ####################################
