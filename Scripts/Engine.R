@@ -7,7 +7,6 @@
 
 Genes_Info <- read.delim(paste(INFLO_HOME,"Support_Files/GENE_NAMES_CHECK.txt",sep=""),sep="\t",header = T, check.names = F, stringsAsFactors = F)
 Genes_Info <- Genes_Info[!duplicated(Genes_Info),]
-
 ####################################
 
 
@@ -183,9 +182,11 @@ Wilcox_Test <- function(X){
   Dat <- X
   tumor_samples <- intersect(tumor_samples,colnames(Dat))
   normal_samples <- intersect(normal_samples,colnames(Dat))
+  
   if(length(normal_samples)>=3){
     tumor_matrix <- Dat[,tumor_samples]
     normal_matrix <- Dat[,normal_samples]
+    colnames(normal_matrix) <- sapply(colnames(normal_matrix),function(x) paste("Normal_",as.character(x),sep = ""))
     processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
     Dat <- cbind(tumor_matrix,normal_matrix)
     processed_tumor_matrix <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
@@ -263,6 +264,7 @@ DeSEQ_TEST <- function(X){
   Dat <-X
   tumor_matrix <- Dat[,intersect(colnames(Dat),tumor_samples)]
   normal_matrix <- Dat[,intersect(colnames(Dat),normal_samples)]
+  colnames(normal_matrix) <- sapply(colnames(normal_matrix),function(x) paste("Normal_",as.character(x),sep = ""))
   
   DEFSEQ_RES <- matrix(NA,ncol=ncol(tumor_matrix),nrow=nrow(tumor_matrix))
   colnames(DEFSEQ_RES) = colnames(tumor_matrix)
@@ -455,7 +457,7 @@ Post_InFlo <- function(X){
         colnames(pathway_file)[1] <- "Patient"
         pathway_file[,length(pathway_file[1,])] <- NULL
         
-        Without_Norm_av <- aggregate(pathway_file,by=list(pathway_file$Patient),FUN=mean,na.rm = T)
+        Without_Norm_av <- aggregate(pathway_file,by=list(pathway_file$Patient),FUN=mean,na.rm = T,na.action=NULL)
         Without_Norm_av[,'Patient'] <- NULL
         Without_Norm_av[,'Sample.'] <- NULL
         colnames(Without_Norm_av)[1] <- "Patient" 
@@ -476,7 +478,8 @@ Post_InFlo <- function(X){
         binned_file <- as.data.frame(t(av))
         binned_file <- cbind(Inflo_Res_Files[i,1],rownames(binned_file),binned_file)
         colnames(binned_file)[c(1,2)] <- c("PID","Interaction")
-        res <- rbind.data.frame(res,binned_file)
+        #res <- rbind.data.frame(res,binned_file)
+        res <- rbind.fill(res,binned_file)
       }, error=function(e){cat("ERROR :",as.character(Inflo_Res_Files[i,1]),conditionMessage(e), "\n")})
     }
     INFLO_DATA <- NULL
@@ -484,7 +487,7 @@ Post_InFlo <- function(X){
     INFLO_DATA <- as.data.frame(INFLO_DATA)
     #INFLO_DATA[,'Patient'] <- NULL
     rownames(INFLO_DATA) <- NULL
-    INFLO_DATA <- INFLO_DATA[complete.cases(INFLO_DATA),]
+    #INFLO_DATA <- INFLO_DATA[complete.cases(INFLO_DATA),]
     INFLO_DATA[,'Interaction'] <- as.character(INFLO_DATA[,'Interaction'])
     # INFLO_DATA$ID2 <- paste(INFLO_DATA[,'name'],INFLO_DATA[,'Interaction'],sep="*")
     # INFLO_DATA$ID2 <- gsub(" ","_",INFLO_DATA$ID2)
@@ -545,11 +548,11 @@ Post_InFlo <- function(X){
     
     
     SIG_TAR <- INFLO_DATA[,c("Target",unlist(setdiff(colnames(INFLO_DATA),c("PID","Pathway_Name","Interaction","Target","Parent","Parent_STATUS","Parents"))))]
-    SIG_TAR <- aggregate(.~Target, data=SIG_TAR, mean,na.action = na.omit)
+    SIG_TAR <- aggregate(.~Target, data=SIG_TAR, mean, na.rm = TRUE, na.action = NULL)
     colnames(SIG_TAR)[1] <- "Node"
     
     SIG_PAR <- INFLO_DATA[,c("Parent",unlist(setdiff(colnames(INFLO_DATA),c("PID","Pathway_Name","Interaction","Target","Parent","Parent_STATUS","Parents"))))]
-    SIG_PAR <- aggregate(.~Parent, data=SIG_PAR, mean,na.action = na.omit)
+    SIG_PAR <- aggregate(.~Parent, data=SIG_PAR, mean,na.rm = TRUE, na.action = NULL)
     colnames(SIG_PAR)[1] <-"Node"
     
     
